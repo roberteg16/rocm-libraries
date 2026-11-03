@@ -206,6 +206,10 @@ def test_block_dequant_solution_is_valid(toolchain):
         ({"ConvertAfterDS": True}, "ConvertAfterDS"),
         ({"GlobalSplitU": 2}, "GlobalSplitU"),
         ({"StaggerU": 32}, "StaggerU"),
+        # PGR2 with ASEM a multiple of 2*DepthU closes the loop every other
+        # iteration, which the scale walk does not follow (wrong on gfx1151).
+        ({"PrefetchGlobalRead": 2, "depthU": 64, "AssertSummationElementMultiple": 128},
+         "AssertSummationElementMultiple"),
         # SIA=1 and PGR>=2 are each fine alone; only together do they
         # desynchronise the scale from the A data it scales.
         ({"PrefetchGlobalRead": 2, "ScheduleIterAlg": 1}, "ScheduleIterAlg"),

@@ -211,6 +211,18 @@ def validateBlockDequantCombination(state, printRejectionReason):
                % (state["AssertSummationElementMultiple"], state["DepthU"]))
         return False
 
+    # With AssertSummationElementMultiple a multiple of 2*DepthU and PGR2 the
+    # loop closes once every two iterations (counter steps by 2). The block-scale
+    # walk does not follow that loop shape: measured wrong on gfx1151 (every
+    # output element of DepthU 64 kernels with ASEM 128).
+    if state["PrefetchGlobalRead"] == 2 and \
+            state["AssertSummationElementMultiple"] % (2 * state["DepthU"]) == 0:
+        reject(state, printRejectionReason,
+               "UseScaleAB=Block with PrefetchGlobalRead=2 requires AssertSummationElementMultiple "
+               "(%d) not a multiple of 2*DepthU (%d)"
+               % (state["AssertSummationElementMultiple"], 2 * state["DepthU"]))
+        return False
+
     # Accepted. Only now mutate the state: per-load scale offsets need a per-load
     # A offset VGPR to derive from, and the SGPR-offset optimization would
     # collapse those into one VGPR plus SGPR deltas.
