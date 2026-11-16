@@ -178,6 +178,8 @@ def getRequiredParametersMin() -> set:
         'WavefrontSize',
         'WorkGroup',
         'WorkGroupMappingXCC',
+        'WorkGroupPhaseStagger',
+        'WorkGroupPhaseStaggerBit',
         'DtlPlusLdsBuf',
         'TDMPlusLdsBuf',
         'MinGRIncPerMfma',

@@ -98,7 +98,7 @@ from .Activation import ActivationType
 from .CustomKernels import isCustomKernelConfig, getCustomKernelFilepath, getCustomKernelSource, supportsUserSgprKernargPreload
 from .Common import roundUp, log2, ceilDivide, choose_multiplier, wmmaV3InputVgprLayout, clusterEnabled, isPow2, persistentSpatialCluster, plsinBlockSchedTile
 from .OccupancyMeasure import compute_occupancy_from_asm_source, _arch_caps_for_kernel
-from rocisa.instruction import ECvtF16toF32, ECvtF32toF16, ECvtPkFP8toF32
+from rocisa.instruction import ECvtF16toF32, ECvtF32toF16, ECvtPkFP8toF32, SSleep
 from .Common import print2, printExit, printWarning, INDEX_CHARS, DebugConfig, DataDirection, isSubtileMultiDU, plsinBlockSchedTile, isMxf4SubtilePath, isSubtileSwizzledTensor
 from .Components.NonTemporal import decodeNonTemporal, forceCoherentNonTemporal, tdmCacheModifiers
 from .Common.DataType import DataType
@@ -377,6 +377,24 @@ class KernelWriterAssembly(KernelWriter):
       return None
     # The tightest of the three limits, at least one workgroup.
     return max(1, min(vgprOccupancy, ldsOccupancy, sgprOccupancy))
+
+  def workGroupPhaseStagger(self, kernel):
+    """WorkGroupPhaseStagger: workgroups with bit WorkGroupPhaseStaggerBit of their first id set sleep
+    WorkGroupPhaseStagger * 64 cycles before anything else (see ValidParameters)."""
+    module = Module("workGroupPhaseStagger")
+    units = kernel["WorkGroupPhaseStagger"]
+    if not units:
+      return module
+    skip = Label("WorkGroupPhaseStaggerEnd", "")
+    module.add(SBitcmp1B32(src0=sgpr("WorkGroup0"), src1=kernel["WorkGroupPhaseStaggerBit"],
+                           comment="workgroup phase stagger: this workgroup shares a WGP with id - 2^bit?"))
+    module.add(SCBranchSCC0(labelName=skip.getLabelName(), comment="no: start now"))
+    while units > 0:
+      step = min(units, 127)
+      module.add(SSleep(step, "start %u cycles later" % (64 * step)))
+      units -= step
+    module.add(skip)
+    return module
 
   def getSgprOccupancy(self, sgprs):
     return self.states.regCaps["PhysicalMaxSgpr"]//sgprs
@@ -3504,6 +3522,7 @@ class KernelWriterAssembly(KernelWriter):
 
       if self.states.numSgprPreload == 0 or self.states.archCaps["SgprPreloadPad"]:
         commonArgs = Module("load arguments")
+        commonArgs.add(self.workGroupPhaseStagger(kernel))
         commonArgs.addComment1("Load num of Gemms")
         commonArgs.add(self.argLoader.loadKernArg(sgprNumsOfGemm, "KernArgAddress", 0, dword=1))
         # Load combined internal arguments
