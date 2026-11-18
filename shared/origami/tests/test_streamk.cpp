@@ -537,6 +537,33 @@ TEST_CASE("Origami streamk: W4A16 on gfx1151 with at most a tile per CU",
   REQUIRE(grid(2048, 64, 8, 1) != 40);
 }
 
+TEST_CASE("Origami streamk: the W4A16 grid needs a bf16/fp16 MI type",
+          "[streamk][grid][w4a16]") {
+  // The grid rule and the W4A16 latency model share w4a16_defaults_t::applies: an
+  // int4-A problem on gfx1151 with another MI type (W4A8, say) gets neither.
+  auto hw = make_hardware(950);
+  hw.arch = origami::hardware_t::architecture_t::gfx1151;
+  auto grid = [&](origami::data_type_t a_dtype, origami::data_type_t mi_dtype) {
+    auto p     = make_problem(256, 256, 4096);
+    p.a_dtype  = a_dtype;
+    p.mi_dtype = mi_dtype;
+    p.num_cus  = 40;
+    auto c     = make_config(64, 256, 64);
+    c.workspace_size            = std::numeric_limits<size_t>::max() / 2;
+    c.workspace_size_per_elem_c = 4;
+    c.tensile().wave_group_m    = 2;
+    c.tensile().wave_group_n    = 2;
+    return origami::streamk::select_grid_size(p, hw, c, origami::grid_selection_t::k_split_aware);
+  };
+  using dt = origami::data_type_t;
+  // 4 tiles of 4-wave workgroups: the W4A16 rule splits their K over all 40 CUs.
+  REQUIRE(grid(dt::Int4, dt::BFloat16) == 40);
+  REQUIRE(grid(dt::Int4, dt::Half) == 40);
+  // With an int8 MI it is not W4A16: the generic grid, as for a bf16 problem.
+  REQUIRE(grid(dt::Int4, dt::Int8) == grid(dt::BFloat16, dt::BFloat16));
+  REQUIRE(grid(dt::Int4, dt::Int8) != 40);
+}
+
 TEST_CASE("Origami streamk: W4A16 on gfx1151 runs data parallel when its last wave wastes little",
           "[streamk][grid][w4a16]") {
   auto hw = make_hardware(950);

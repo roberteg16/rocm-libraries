@@ -145,6 +145,16 @@ struct heuristic_defaults_t {
  * are tuned.
  */
 struct w4a16_defaults_t {
+  // The problems these defaults are for: gfx1151, int4 A (the weights) dequantized
+  // to a bf16/fp16 MI type inside the kernel. The latency model and the Stream-K grid
+  // rule both test this, so that they always apply together: their thresholds were
+  // calibrated as one.
+  static bool applies(const problem_t& problem, const hardware_t& hardware) {
+    return hardware.arch == hardware_t::architecture_t::gfx1151 &&
+           problem.a_dtype == data_type_t::Int4 &&
+           (problem.mi_dtype == data_type_t::BFloat16 || problem.mi_dtype == data_type_t::Half);
+  }
+
   // --- Latency model ---
   // Dequantize VALU per element, including its dependency stalls: bf16 rounds f32
   // products, fp16 uses packed halves.

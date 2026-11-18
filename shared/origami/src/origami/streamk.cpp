@@ -360,7 +360,8 @@ static size_t correct_sk_grid_for_partial_tiles(size_t sk_grid,
 }
 
 /**
- * @brief Stream-K grid of W4A16 (int4 A) kernels on gfx1151, or nullopt to use the
+ * @brief Stream-K grid of W4A16 kernels on gfx1151 (w4a16_defaults_t::applies), or
+ *        nullopt to use the
  *        generic grid. Measured on ~1300 prefill GEMMs (66 LLM projection layers
  *        with M from 16 to 4096, plus other model layers), 8 W4A16 types.
  *
@@ -446,7 +447,7 @@ size_t grid_k_split_aware(const problem_t& problem,
                           const config_t& config,
                           size_t cu_count,
                           size_t cu_budget) {
-  if (hardware.arch == hardware_t::architecture_t::gfx1151 && problem.a_dtype == data_type_t::Int4) {
+  if (w4a16_defaults_t::applies(problem, hardware)) {
     if (const auto grid = grid_k_split_aware_gfx1151_w4a16(problem, config, cu_count)) return *grid;
   }
 
