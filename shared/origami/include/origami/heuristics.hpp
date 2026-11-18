@@ -46,6 +46,8 @@ struct heuristic_defaults_t {
   static constexpr double WEIGHT_TILE_TOTAL    = 1.0;
   static constexpr size_t CACHE_LINE_BYTES       = 128;
   static constexpr size_t DRAM_SECTOR_BYTES      = 64;
+  // gfx1250: aligned block DRAM reads and L2 misses move.
+  static constexpr size_t GFX1250_DRAM_BLOCK_BYTES = 256;
   static constexpr size_t LDS_XFER_BYTES         = 128;
   static constexpr double KERNEL_LAUNCH_OVERHEAD = 4.5 * 2200.0;
   static constexpr double POSTGSU_KERNEL_LAUNCH_OVERHEAD = 1.6 * 2200.0;
@@ -83,6 +85,116 @@ struct heuristic_defaults_t {
   static constexpr size_t SUBMI_GEMV_K_MIN             = 256;
   static constexpr double EPILOGUE_OCC_SATURATION      = 2.0;
   static constexpr double SCALAR_STORE_EXPOSED_PENALTY = 4.0;
+
+  // gfx1250 (CDNA5) model fit constants, read only where hardware.is_cdna5().
+  /// Tensor-DMA row service rate of one WGP from L2, B/ns, and the minimum bytes a row costs.
+  static constexpr double GFX1250_TDM_L2_ROW_RATE  = 557.0;
+  static constexpr double GFX1250_TDM_L2_ROW_BYTES = 256.0;
+  /// Tensor-DMA row service rate of one WGP from DRAM, B/ns, and the minimum bytes a row costs.
+  static constexpr double GFX1250_TDM_DRAM_ROW_RATE  = 354.0;
+  static constexpr double GFX1250_TDM_DRAM_ROW_BYTES = 183.0;
+  /// Soft-minimum sharpness of the WGPs' tensor-DMA rate against the L2 / DRAM peak.
+  static constexpr double GFX1250_TDM_L2_SHARPNESS   = 3.30;
+  static constexpr double GFX1250_TDM_DRAM_SHARPNESS = 9.72;
+  /// Fixed time of one wave's epilogue store instruction, ns.
+  static constexpr double GFX1250_STORE_INST_NS = 14.31;
+  /// Store bandwidth of one wave's instruction stream, B/ns.
+  static constexpr double GFX1250_STORE_WAVE_BW = 29.2;
+  /// Store bandwidth one WGP's waves share, B/ns.
+  static constexpr double GFX1250_STORE_WGP_BW = 216.0;
+  /// Device store bandwidth ceiling, B/ns, and the soft-minimum sharpness it is met with.
+  static constexpr double GFX1250_STORE_PEAK_BW   = 20950.0;
+  static constexpr double GFX1250_STORE_SHARPNESS = 2.17;
+  /// Fraction of the iteration time that hides the cluster-barrier round trip (the round trip
+  /// itself is L_BARRIER cycles).
+  static constexpr double GFX1250_CLUSTER_SYNC_HIDDEN = 0.1;
+  /// AdaptiveGemm time saved with an M remainder at few K-iterations (fraction), and the
+  /// K-iterations at which the saving halves.
+  static constexpr double GFX1250_ADAPTIVE_GEMM_GAIN    = 0.11;
+  static constexpr double GFX1250_ADAPTIVE_GEMM_K_ITERS = 128.0;
+  /// TemporalHint (1,1) bands of the A+B+D footprint over the total L2 (ratios), and the
+  /// (0,0) over (1,1) time ratio in them: neutral below TH_LOW, TH_SPEEDUP_LOW up to TH_MID,
+  /// neutral up to TH_HIGH, TH_SPEEDUP_HIGH above.
+  static constexpr double GFX1250_TH_LOW          = 0.75;
+  static constexpr double GFX1250_TH_MID          = 2.76;
+  static constexpr double GFX1250_TH_HIGH         = 5.73;
+  static constexpr double GFX1250_TH_SPEEDUP_LOW  = 1.117;
+  static constexpr double GFX1250_TH_SPEEDUP_HIGH = 0.896;
+  /// WGPs of the part hardware_t::mem_bw_per_wg_coefficients was fit on; compute_mem_bw_from_
+  /// occupancy rescales the active CU count by this over the part's N_CU.
+  static constexpr double GFX1250_BW_FIT_WGPS = 256.0;
+  /// Sustained DRAM read bandwidth (B/ns) the GFX1250_STORE_* rates were measured at; the store
+  /// model scales them by the part's DRAM peak over this.
+  static constexpr double GFX1250_STORE_REF_DRAM_BW = 17130.0;
+  /// Load-to-use latency of a DRAM access (single-wave pointer chase), ns.
+  static constexpr double GFX1250_DRAM_LATENCY_NS = 180.0;
+  /// Load-to-use latency of an L2 hit, ns.
+  static constexpr double GFX1250_L2_LATENCY_NS = 125.0;
+  /// Dependent LDS read latency in cycles the matrix pipe must cover.
+  static constexpr double GFX1250_LDS_READ_LATENCY = 70.0;
+};
+
+/**
+ * @brief W4A16 (int4 A dequantized to a bf16/fp16 MI type): latency-model constants
+ *        and Stream-K launch-grid thresholds.
+ *
+ * Calibrated for gfx1151 (Strix Halo), and only applied there: fit with the W4A16
+ * kernel sets of its Origami logic, on hipBLASLt GPU kernel times (every kernel timed
+ * in its own process, rows padded to an odd multiple of 128 B; the score is the
+ * measured speed of Origami's pick). Other architectures are not affected until they
+ * are tuned.
+ */
+struct w4a16_defaults_t {
+  // The problems these defaults are for: gfx1151, int4 A (the weights) dequantized
+  // to a bf16/fp16 MI type inside the kernel. The latency model and the Stream-K grid
+  // rule both test this, so that they always apply together: their thresholds were
+  // calibrated as one.
+  static bool applies(const problem_t& problem, const hardware_t& hardware) {
+    return hardware.arch == hardware_t::architecture_t::gfx1151 &&
+           problem.a_dtype == data_type_t::Int4 &&
+           (problem.mi_dtype == data_type_t::BFloat16 || problem.mi_dtype == data_type_t::Half);
+  }
+
+  // --- Latency model ---
+  // Dequantize VALU per element, including its dependency stalls: bf16 rounds f32
+  // products, fp16 uses packed halves.
+  static constexpr double BF16_DEQUANT_VALU_PER_ELEM = 8.0;
+  static constexpr double F16_DEQUANT_VALU_PER_ELEM  = 4.0;
+  static constexpr double K_ITER_LOOP_OVERHEAD       = 500.0;
+  // Co-residency counted in waves: one 16-wave workgroup keeps a CU as busy as
+  // several small ones.
+  static constexpr double TARGET_WAVES_PER_CU = 4.0;
+  // Stream-K workgroups sharing tiles below this many tiles per CU are charged their
+  // share of tiles, not waves (above it data parallel's last wave is a small part of
+  // the work).
+  static constexpr double SK_SHARED_MAX_TILES_PER_CU = 6.0;
+  // Cost of a Stream-K partial tile on the critical path, in units of writing and
+  // reading its f32 values at the workgroups' memory bandwidth.
+  static constexpr double SK_PARTIAL_TILE_COST = 256.0;
+
+  // --- Stream-K launch grid (grid_k_split_aware_gfx1151_w4a16, rules 1-6) ---
+  // Waves per workgroup when the config does not say.
+  static constexpr int DEFAULT_WAVES_PER_WORKGROUP = 4;
+  // Workgroups with this many waves fill a CU.
+  static constexpr int FULL_CU_WAVES = 16;
+  // Rule 1: the t range where 16-wave workgroups split K instead of running DP.
+  static constexpr double FULL_CU_SPLIT_MIN_TILES_PER_CU = 0.5;
+  static constexpr double FULL_CU_SPLIT_MAX_TILES_PER_CU = 0.75;
+  // Rule 2: short K, in K iterations (the second when t > 0.5).
+  static constexpr size_t SK_SPLIT_MIN_K_ITERS           = 8;
+  static constexpr size_t SK_SPLIT_MIN_K_ITERS_OVER_HALF = 16;
+  // Rule 6: share the tiles below this t. Above it, DP for short K.
+  static constexpr size_t GRID_SHARED_MAX_TILES_PER_CU = 5;
+  static constexpr size_t MANY_TILES_DP_MAX_K_ITERS    = 8;
+  // Rule 4: largest ceil(t) / t that still runs DP, by waves per workgroup.
+  static constexpr double DP_MAX_WAVE_ROUNDING_16_WAVES = 1.5;
+  static constexpr double DP_MAX_WAVE_ROUNDING_8_WAVES  = 1.06;
+  static constexpr double DP_MAX_WAVE_ROUNDING_4_WAVES  = 1.15;
+  // Rule 4: a single row of token tiles is shared, not DP, up to this t.
+  static constexpr double TOKEN_ROW_SHARED_MAX_TILES_PER_CU = 5.0;
+  // Rule 5: token tiles (MT_N at most this) and their workgroups per CU.
+  static constexpr size_t TOKEN_TILE_MAX_N      = 48;
+  static constexpr size_t TOKEN_TILE_WGS_PER_CU = 2;
 };
 
 /**
