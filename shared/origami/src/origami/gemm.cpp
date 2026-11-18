@@ -2991,6 +2991,9 @@ double compute_total_latency(const problem_t& problem,
   // are charged below), not whole waves: below a few tiles per CU, where data
   // parallel pays a partly idle last wave, counting it as whole waves made Origami
   // pick the data-parallel kernel, measured up to 2x slower on gfx1151.
+  // Token-tile grids (two workgroups per CU, streamk.cpp) are left out and still
+  // charged whole waves; w4a16_defaults_t was calibrated that way. Charging them
+  // tiles / CUs changed the pick on 6 of the 632 calibration problems (all M = 48).
   const size_t usable_cus = resolve_num_cus(problem.num_cus, hardware.N_CU);
   if (w4a16_defaults_t::applies(problem, hardware) && config.stream_k > 0 && context.num_wgs < context.num_output_tiles
       && context.num_wgs <= usable_cus
