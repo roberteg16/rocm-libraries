@@ -140,7 +140,7 @@ struct heuristic_defaults_t {
  *
  * The two architectures run the same kernels on the same ISA, so every constant that describes
  * the kernels is the same on both.  What differs is read from hardware_t (CUs, SIMDs per CU,
- * MALL) and from the kernel's CUOccupancy.
+ * MALL) and from the kernel's CUOccupancy, except the DRAM bandwidth of the decode model.
  */
 struct w4a16_params_t {
   // --- Tile latency model ---
@@ -173,9 +173,21 @@ struct w4a16_params_t {
   static constexpr double DP_MAX_WAVE_ROUNDING         = 1.06;
   // Rule 5: token tiles (MT_N at most this) get one workgroup per SIMD of the CU.
   static constexpr size_t TOKEN_TILE_MAX_N = 48;
+
+  // --- Decode kernels (dot2 WaveSplitK: one wave per workgroup, MT_M weight rows x MT_N
+  // tokens, K split over the wave's lanes; see compute_w4a16_decode_latency) ---
+  // Cycles of a wave: fixed (start, prologue, reduction, store), and per K iteration (the
+  // load-to-use latency of its global reads and the work on them).
+  static constexpr double DECODE_WAVE_CYCLES = 5000.0;
+  static constexpr double DECODE_ITER_CYCLES = 1500.0;
+  // Peak DRAM read bandwidth of the device, bytes/us (per architecture, measured).
+  double decode_dram_bytes_per_us;
 };
 
-inline constexpr w4a16_params_t W4A16_PARAMS{};
+// gfx1151 (Strix Halo): 230 GiB/s.
+inline constexpr w4a16_params_t W4A16_GFX1151_PARAMS{247.0e3};
+// gfx1150 (Strix Point): no decode kernels yet (0 keeps the decode model off).
+inline constexpr w4a16_params_t W4A16_GFX1150_PARAMS{0.0};
 
 /// The W4A16 constants for @p problem on @p hardware, or nullptr where the W4A16 model does
 /// not apply. The latency model and the Stream-K grid rule both use it, so they apply together.
@@ -183,8 +195,8 @@ inline const w4a16_params_t* w4a16_params(const problem_t& problem, const hardwa
   if (problem.a_dtype != data_type_t::Int4) return nullptr;
   const w4a16_params_t* p = nullptr;
   switch (hardware.arch) {
-    case hardware_t::architecture_t::gfx1150: p = &W4A16_PARAMS; break;
-    case hardware_t::architecture_t::gfx1151: p = &W4A16_PARAMS; break;
+    case hardware_t::architecture_t::gfx1150: p = &W4A16_GFX1150_PARAMS; break;
+    case hardware_t::architecture_t::gfx1151: p = &W4A16_GFX1151_PARAMS; break;
     default: return nullptr;
   }
   return (problem.mi_dtype == data_type_t::BFloat16 || problem.mi_dtype == data_type_t::Half) ? p : nullptr;
