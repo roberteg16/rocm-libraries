@@ -111,7 +111,7 @@ from .Common import print2, printExit, printWarning, INDEX_CHARS, DebugConfig, D
 from .Components.NonTemporal import decodeNonTemporal, forceCoherentNonTemporal, tdmCacheModifiers
 from .Common.DataType import DataType
 from .Common.ScaleAlphaVec import scaleAlphaSupportsDeviceScalar
-from .Common.MatrixInstructionNaming import _pinnedKernelIsa, dataTypeNameAbbrevToInstType, matrixInstructionTypes
+from .Common.MatrixInstructionNaming import dataTypeNameAbbrevToInstType, matrixInstructionTypes
 from .Common.RegisterPool import RegisterPool, allocTmpGpr, allocTmpGprList
 from .Components.WorkGroupMappingAlgos import DefaultWGM, wgmXCC, SpaceFillingCurveWalk, \
   FusedA2AWgRemap
@@ -219,7 +219,6 @@ from functools import lru_cache
 from typing import List, Mapping, NamedTuple, Optional, Tuple, Union
 
 import os
-import re
 
 # The states.overflowedResources codes judgeRegisterBudget reaches, and so the
 # only ones register allocation can overturn: too many vgprs, too many sgprs,
@@ -295,17 +294,13 @@ class KernelWriterAssembly(KernelWriter):
     try:
       if isCustom:
         code = self._getCustomKernelSource(kernel)
-        # The occupancy formula in compute_occupancy_from_resources is
-        # gfx9/wave64-specific; only override CUOccupancy for gfx9 custom
-        # kernels, and for gfx11 W4A16 (int4 A) ones by the rule their
-        # Origami constants were calibrated with. Other non-gfx9 (wave32) custom kernels leave
-        # CUOccupancy at its default (-1) rather than emit a wrong value (Fix #2).
+        # A CUOccupancy the logic file declares for the kernel is kept, on any
+        # arch. Otherwise the occupancy formula in compute_occupancy_from_resources
+        # is gfx9/wave64-specific: only gfx9 custom kernels get it computed, and
+        # other (wave32) custom kernels leave CUOccupancy at its default (-1)
+        # rather than emit a wrong value (Fix #2).
         _isa = kernel.get("ISA", [9, 0, 8])
-        if _isa[0] == 11 and self._isInt4A(kernel):
-          occ = self._gfx11CustomW4A16KernelOccupancy(kernel, code)
-          if occ is not None:
-            kernel["CUOccupancy"] = occ
-        if _isa[0] == 9:
+        if kernel.get("CUOccupancy", -1) <= 0 and _isa[0] == 9:
           # Use live rocisa caps so custom-kernel occupancy matches the codegen path.
           # For custom kernels, setRocIsa() is called (not setKernel()), so
           # self.states.regCaps/archCaps are not initialized — query the singleton directly.
@@ -340,54 +335,6 @@ class KernelWriterAssembly(KernelWriter):
       code = ""
       errcode = -2
     return (errcode, code)
-
-  @staticmethod
-  def _isInt4A(kernel):
-    """Whether the kernel's A is int4 (W4A16)."""
-    try:
-      return bool(kernel["ProblemType"]["DataTypeA"].isInt4())
-    except (KeyError, TypeError, AttributeError):
-      return False
-
-  def _gfx11CustomW4A16KernelOccupancy(self, kernel, code):
-    """CUOccupancy of a gfx11 W4A16 (int4 A) custom kernel (workgroups per WGP, LDS pooled
-    over the WGP), from the resources its .s declares.  Origami ranks the kernels of a
-    Prediction library by it.  This is the rule generated gfx11 kernels got before #9708
-    changed getVgprOccupancy (physical VGPR file, 24-register granularity): the gfx1151
-    W4A16 kernels were generated, and Origami's W4A16 constants calibrated, with it.
-    None when a directive or a rocisa capability is missing."""
-    def directive(name):
-      m = re.search(r"\.%s\s+(\d+)" % name, code)
-      return int(m.group(1)) if m else None
-    vgprs = directive("amdhsa_next_free_vgpr")              # VGPRs per wave
-    sgprs = directive("amdhsa_next_free_sgpr")              # SGPRs per wave
-    ldsSize = directive("amdhsa_group_segment_fixed_size")  # LDS bytes per workgroup
-    if vgprs is None or not sgprs or ldsSize is None:
-      return None
-    # The caps are per kernel ISA, set as code generation sets them. Pinned only for
-    # the query: other custom kernels on this thread (gfx9's below) read the
-    # singleton's caps without pinning their own ISA.
-    ti = rocIsa.getInstance()
-    try:
-      with _pinnedKernelIsa(kernel["ISA"], kernel.get("WavefrontSize", 32)):
-        regCaps, archCaps = ti.getRegCaps(), ti.getArchCaps()
-      # getVgprOccupancy with doubleVgpr, as wave32 kernels are judged.
-      # Workgroup size in blocks of 256 threads (at least one).
-      multiplier = int(ceil(max(kernel["NumThreads"], 256) / 256.0))
-      # Wave slots per SIMD, divided among those blocks.
-      maxOccupancy = archCaps["MaxWavesPerSimd"] // multiplier
-      # VGPRs rounded up to the 8-register granule, for every block.
-      vgprsAligned = int(ceil(vgprs / 8)) * 8 * multiplier
-      # Workgroups the VGPR file holds (doubled for wave32), at most the wave slots.
-      vgprOccupancy = min(2 * regCaps["MaxVgpr"] // vgprsAligned, maxOccupancy) if vgprsAligned else maxOccupancy
-      # Workgroups the LDS holds, pooled over the WGP's two CUs.
-      ldsOccupancy = self.getLdsLimitedOccupancy(2 * archCaps["DeviceLDS"], ldsSize, archCaps["LdsGranularity"])
-      # Workgroups the SGPR file holds.
-      sgprOccupancy = regCaps["PhysicalMaxSgpr"] // sgprs
-    except (KeyError, AttributeError, TypeError, RuntimeError):
-      return None
-    # The tightest of the three limits, at least one workgroup.
-    return max(1, min(vgprOccupancy, ldsOccupancy, sgprOccupancy))
 
   def getSgprOccupancy(self, sgprs):
     return self.states.regCaps["PhysicalMaxSgpr"]//sgprs

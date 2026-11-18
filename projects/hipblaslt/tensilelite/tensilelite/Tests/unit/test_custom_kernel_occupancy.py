@@ -27,6 +27,8 @@ from tensilelite.OccupancyMeasure import (
     _arch_caps_for_kernel,
 )
 
+from logic_corpus import needs_logic_corpus, require_asm_full_root
+
 try:
     from tensilelite.KernelWriterAssembly import KernelWriterAssembly as _KWA
     _KWA_AVAILABLE = True
@@ -316,8 +318,7 @@ class TestNonGfx9OccupancyNotComputed:
     _arch_caps_for_kernel returns None (the formula is gfx9/wave64-specific).
     Callers use ``if occ is not None: kernel["CUOccupancy"] = occ``; returning
     None ensures CUOccupancy stays at its default (-1) for non-gfx9 custom kernels
-    (gfx11 ones get theirs from the generated-kernel rule instead, see
-    TestGfx11CustomKernelOccupancy).
+    that do not declare one (see TestDeclaredCustomKernelOccupancy).
     """
 
     def _asm(self, vgpr=64, sgpr=32, lds=16384):
@@ -364,115 +365,106 @@ class TestNonGfx9OccupancyNotComputed:
             f"CUOccupancy must stay -1 for non-gfx9; got {kernel['CUOccupancy']}"
 
 
-class TestGfx11CustomKernelOccupancy:
-    """gfx11 W4A16 custom kernels get CUOccupancy by the rule generated gfx11 kernels get.
+class TestDeclaredCustomKernelOccupancy:
+    """A CUOccupancy the logic file declares for a custom kernel is kept, on any arch.
 
-    Origami ranks the kernels of a Prediction library by CUOccupancy, so a
-    TensileLite-generated kernel shipped as a custom kernel (the gfx1151 W4A16
-    prefill kernels) must keep the occupancy the generator gave it: getOccupancy
-    with wave32's doubled VGPR file (8-register granules) and LDS pooled over the
-    WGP.  The rocisa caps are those of gfx1151.
+    Custom kernels skip code generation. Without a declared value, gfx9 ones get
+    theirs from the resources of their .s and the others keep -1 (which the host
+    clamps to 1). With one -- the gfx1151 W4A16 kernels, whose logic entries carry the
+    occupancy the generator computed -- the kernel writer keeps it, and Origami ranks
+    the kernels of a Prediction library by it.
     """
 
-    _REG_CAPS = {"MaxVgpr": 256, "PhysicalMaxSgpr": 1696}
-    _ARCH_CAPS = {"MaxWavesPerSimd": 16, "DeviceLDS": 65536, "LdsGranularity": 1024}
+    def _occupancy(self, isa, declared, asm=None):
+        from unittest.mock import MagicMock, patch
 
-    # What the thread was pinned to before the query; the query must put it back.
-    _PREV_KERNEL = SimpleNamespace(isa=(9, 4, 2), wavefrontSize=64)
-    _PREV_VGPR_IDX = {"ValuC": 4}
-    _PREV_VGPR_MSB = 1
-
-    def _occupancy(self, asm, num_threads, int4_a=True, mock_ti=None):
-        from unittest.mock import MagicMock, call, patch
-
-        if mock_ti is None:
-            mock_ti = MagicMock()
-        mock_ti.getRegCaps.return_value = self._REG_CAPS
-        mock_ti.getArchCaps.return_value = self._ARCH_CAPS
-        mock_ti.getKernel.return_value = self._PREV_KERNEL
-        mock_ti.getVgprIdx.return_value = dict(self._PREV_VGPR_IDX)
-        mock_ti.getVgprMsb.return_value = self._PREV_VGPR_MSB
+        mock_ti = MagicMock()
+        mock_ti.getRegCaps.return_value = {"MaxVgpr": 512, "PhysicalMaxSgpr": 800}
+        mock_ti.getArchCaps.return_value = {"ArchAccUnifiedRegs": True, "DeviceLDS": 65536,
+                                            "MaxWavesPerSimd": 8}
         kwa = object.__new__(_KWA)
         kwa.states = SimpleNamespace()
-        kwa._getCustomKernelSource = lambda k, d=None: asm
+        kwa._getCustomKernelSource = lambda k, d=None: asm or _make_asm(128, 64, 16384)
         kernel = _KernelObj({
-            "CustomKernelName": "test_gfx11_kernel",
-            "ISA": [11, 5, 1],
-            "NumThreads": num_threads,
+            "CustomKernelName": "test_kernel",
+            "ISA": list(isa),
+            "NumThreads": 256,
             "KernelLanguage": "Assembly",
-            "CUOccupancy": -1,
-            "ProblemType": {"DataTypeA": SimpleNamespace(isInt4=lambda: int4_a)},
+            "CUOccupancy": declared,
         })
-        with patch("tensilelite.KernelWriterAssembly.rocIsa") as mock_rocisa, \
-             patch("tensilelite.Common.MatrixInstructionNaming.rocIsa") as mock_naming_rocisa:
+        with patch("tensilelite.KernelWriterAssembly.rocIsa") as mock_rocisa:
             mock_rocisa.getInstance.return_value = mock_ti
-            mock_naming_rocisa.getInstance.return_value = mock_ti
             errcode, _ = kwa.getSourceFileString(kernel)
         assert errcode == 0
-        if kernel["CUOccupancy"] != -1:
-            # The caps are read for the kernel's ISA and wave size, then the thread's
-            # previous kernel is restored.
-            assert mock_ti.setKernel.call_args_list == [call((11, 5, 1), 32), call((9, 4, 2), 64)]
         return kernel["CUOccupancy"]
 
     @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
-    def test_vgprs_limit_in_8_register_granules_of_the_doubled_file(self):
-        # 183 VGPRs -> 184 of 512 -> 2; LDS 36 KiB of the 128 KiB WGP pool -> 3.
-        assert self._occupancy(_make_asm(183, 94, 36864), 256) == 2
+    @pytest.mark.parametrize("isa", [(11, 5, 1), (12, 0, 1)])
+    def test_wave32_custom_kernel_keeps_the_declared_value(self, isa):
+        assert self._occupancy(isa, 3) == 3
 
     @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
-    def test_lds_pooled_over_the_wgp(self):
-        # 104 VGPRs -> 4; 40 KiB of LDS -> 3 of the 128 KiB pool (1 of 64 KiB).
-        assert self._occupancy(_make_asm(100, 80, 40960), 128) == 3
+    @pytest.mark.parametrize("isa", [(11, 5, 1), (12, 0, 1)])
+    def test_wave32_custom_kernel_without_a_value_keeps_the_default(self, isa):
+        assert self._occupancy(isa, -1) == -1
 
     @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
-    def test_other_gfx11_kernels_keep_the_default(self):
-        # Only W4A16 (int4 A) gfx11 custom kernels get it.
-        assert self._occupancy(_make_asm(100, 80, 40960), 128, int4_a=False) == -1
-
-    @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
-    def test_missing_directives_leave_the_default(self):
-        asm = ".amdhsa_kernel bad_kernel\n.end_amdhsa_kernel\n"
-        assert self._occupancy(asm, 256) == -1
-
-    @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
-    def test_query_restores_the_thread_kernel(self):
-        # setKernel also clears the VGPR index map and MSB; all three come back.
-        from unittest.mock import MagicMock, call
-
-        mock_ti = MagicMock()
-        assert self._occupancy(_make_asm(183, 94, 36864), 256, mock_ti=mock_ti) == 2
-        assert mock_ti.setVgprIdx.call_args_list == [call("ValuC", 4)]
-        mock_ti.setVgprMsb.assert_called_with(1)
+    def test_gfx9_custom_kernel_keeps_the_declared_value(self):
+        # Its resources would give another value; the declared one wins.
+        computed = self._occupancy((9, 4, 2), -1)
+        assert computed > 0
+        assert self._occupancy((9, 4, 2), computed + 1) == computed + 1
 
 
-@pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
-class TestGfx11CustomKernelOccupancyLeavesTheIsa:
-    """With the real rocisa singleton: a gfx1151 W4A16 custom kernel's occupancy
-    query must not leave the thread pinned to gfx1151. The gfx9 custom-kernel path
-    reads the singleton's caps without pinning its own ISA, so a gfx9 kernel handled
-    next on the same worker would otherwise get gfx1151's caps."""
+class TestSolutionKeepsTheDeclaredCustomKernelOccupancy:
+    """Solution derivation resets CUOccupancy to -1 (the kernel writer sets it), except
+    for a custom kernel whose logic entry declares a positive value."""
 
-    def test_gfx9_caps_survive_a_gfx1151_query(self):
-        from rocisa import rocIsa
+    def _declared(self, state):
+        from tensilelite.SolutionStructs.Solution import Solution
+        return Solution._declaredCustomKernelOccupancy(state)
 
-        asm_path = shutil.which("amdclang++") or "/usr/bin/amdclang++"
-        if not os.path.exists(asm_path):
-            pytest.skip(f"amdclang++ not found at {asm_path}; cannot init rocisa")
-        ti = rocIsa.getInstance()
-        gfx942, gfx1151 = (9, 4, 2), (11, 5, 1)
-        ti.init(gfx942, asm_path)
-        ti.init(gfx1151, asm_path)
-        ti.setKernel(gfx942, 64)
-        gfx942Caps = (ti.getRegCaps(), ti.getArchCaps())
+    def test_custom_kernel_keeps_a_positive_value(self):
+        assert self._declared({"CustomKernelName": "k", "CUOccupancy": 2}) == 2
 
-        kwa = object.__new__(_KWA)
-        kernel = _KernelObj({"ISA": list(gfx1151), "WavefrontSize": 32, "NumThreads": 256})
-        occ = kwa._gfx11CustomW4A16KernelOccupancy(kernel, _make_asm(183, 94, 36864))
+    @pytest.mark.parametrize("occ", [-1, 0, True, 2.0, "2", None])
+    def test_custom_kernel_without_a_positive_int_gets_the_default(self, occ):
+        assert self._declared({"CustomKernelName": "k", "CUOccupancy": occ}) == -1
 
-        assert occ is not None
-        assert tuple(ti.getKernel().isa) == gfx942 and ti.getKernel().wavefrontSize == 64
-        assert (ti.getRegCaps(), ti.getArchCaps()) == gfx942Caps
+    def test_generated_kernel_always_derives_its_own(self):
+        assert self._declared({"CUOccupancy": 2}) == -1
+        assert self._declared({"CustomKernel": {"name": "k", "generated": True}, "CUOccupancy": 2}) == -1
+
+    def test_handwritten_custom_kernel_block_keeps_a_positive_value(self):
+        assert self._declared({"CustomKernel": {"name": "k"}, "CUOccupancy": 4}) == 4
+
+
+@needs_logic_corpus
+class TestGfx1151W4A16LogicDeclaresOccupancy:
+    """The gfx1151 W4A16 custom kernels get no computed occupancy (not gfx9), so every
+    logic entry that uses one must declare it, and every entry of a kernel the same
+    value; otherwise Origami would see one workgroup per WGP for all of them."""
+
+    def test_every_entry_declares_one_consistent_value(self):
+        import yaml
+
+        loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+        values, missing = {}, []
+        for f in sorted(require_asm_full_root().glob("gfx1151/*/gfx1151_*I4*.yaml")):
+            data = yaml.load(f.read_text(), Loader=loader)
+            for sol in data["Solutions"]:
+                name = sol.get("CustomKernelName")
+                if not name:
+                    continue
+                occ = sol.get("CUOccupancy")
+                if not isinstance(occ, int) or isinstance(occ, bool) or occ < 1:
+                    missing.append(f"{f.name}: {name} ({occ})")
+                else:
+                    values.setdefault(name, set()).add(occ)
+        assert values, "no gfx1151 W4A16 custom kernels found"
+        assert not missing, f"{len(missing)} entries without CUOccupancy, e.g. {missing[:3]}"
+        inconsistent = {n: v for n, v in values.items() if len(v) > 1}
+        assert not inconsistent, f"kernels declared with different values: {inconsistent}"
 
 
 class TestPythonDebugWarning:
