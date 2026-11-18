@@ -195,6 +195,28 @@ struct w4a16_defaults_t {
   // Rule 5: token tiles (MT_N at most this) and their workgroups per CU.
   static constexpr size_t TOKEN_TILE_MAX_N      = 48;
   static constexpr size_t TOKEN_TILE_WGS_PER_CU = 2;
+
+  // --- Decode kernels (dot2 WaveSplitK: one wave per workgroup, MT_M weight rows x
+  // MT_N tokens, K split over the wave's lanes; see compute_w4a16_decode_latency) ---
+  // DRAM read bandwidth reached by the weight stream, bytes/us.
+  static constexpr double DECODE_DRAM_BYTES_PER_US = 239.0e3;
+  // DRAM latency the weight reads in flight have to cover, us: a grid with few waves
+  // (small weight matrices) does not keep enough bytes in flight for the bandwidth.
+  static constexpr double DECODE_DRAM_LATENCY_US = 1.15;
+  // Activation reads (every wave reads its tokens' K values, mostly from L2), bytes/us.
+  static constexpr double DECODE_L2_BYTES_PER_US = 9320.0e3;
+  // Waves resident per CU, per unit of the kernel's occupancy.
+  static constexpr double DECODE_WAVES_PER_CU_PER_OCCUPANCY = 3.24;
+  // Cycles of a wave: fixed (prologue, reduction, store), and per K iteration: the
+  // global-read latency, per weight byte read, per dequantized weight (bf16 counts
+  // twice) and per v_dot2 of the tile.
+  static constexpr double DECODE_WAVE_CYCLES    = 933.0;
+  static constexpr double DECODE_ITER_CYCLES    = 1090.0;
+  static constexpr double DECODE_BYTE_CYCLES    = 0.39;
+  static constexpr double DECODE_DEQUANT_CYCLES = 5.6;
+  static constexpr double DECODE_MAC_CYCLES     = 0.354;
+  // Fixed kernel time, us.
+  static constexpr double DECODE_FIXED_US = 2.44;
 };
 
 /**
