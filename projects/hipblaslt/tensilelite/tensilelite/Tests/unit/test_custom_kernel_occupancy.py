@@ -377,12 +377,21 @@ class TestGfx11CustomKernelOccupancy:
     _REG_CAPS = {"MaxVgpr": 256, "PhysicalMaxSgpr": 1696}
     _ARCH_CAPS = {"MaxWavesPerSimd": 16, "DeviceLDS": 65536, "LdsGranularity": 1024}
 
-    def _occupancy(self, asm, num_threads, int4_a=True):
-        from unittest.mock import MagicMock, patch
+    # What the thread was pinned to before the query; the query must put it back.
+    _PREV_KERNEL = SimpleNamespace(isa=(9, 4, 2), wavefrontSize=64)
+    _PREV_VGPR_IDX = {"ValuC": 4}
+    _PREV_VGPR_MSB = 1
 
-        mock_ti = MagicMock()
+    def _occupancy(self, asm, num_threads, int4_a=True, mock_ti=None):
+        from unittest.mock import MagicMock, call, patch
+
+        if mock_ti is None:
+            mock_ti = MagicMock()
         mock_ti.getRegCaps.return_value = self._REG_CAPS
         mock_ti.getArchCaps.return_value = self._ARCH_CAPS
+        mock_ti.getKernel.return_value = self._PREV_KERNEL
+        mock_ti.getVgprIdx.return_value = dict(self._PREV_VGPR_IDX)
+        mock_ti.getVgprMsb.return_value = self._PREV_VGPR_MSB
         kwa = object.__new__(_KWA)
         kwa.states = SimpleNamespace()
         kwa._getCustomKernelSource = lambda k, d=None: asm
@@ -394,13 +403,16 @@ class TestGfx11CustomKernelOccupancy:
             "CUOccupancy": -1,
             "ProblemType": {"DataTypeA": SimpleNamespace(isInt4=lambda: int4_a)},
         })
-        with patch("tensilelite.KernelWriterAssembly.rocIsa") as mock_rocisa:
+        with patch("tensilelite.KernelWriterAssembly.rocIsa") as mock_rocisa, \
+             patch("tensilelite.Common.MatrixInstructionNaming.rocIsa") as mock_naming_rocisa:
             mock_rocisa.getInstance.return_value = mock_ti
+            mock_naming_rocisa.getInstance.return_value = mock_ti
             errcode, _ = kwa.getSourceFileString(kernel)
         assert errcode == 0
         if kernel["CUOccupancy"] != -1:
-            # The caps are read for the kernel's ISA and wave size.
-            mock_ti.setKernel.assert_called_with((11, 5, 1), 32)
+            # The caps are read for the kernel's ISA and wave size, then the thread's
+            # previous kernel is restored.
+            assert mock_ti.setKernel.call_args_list == [call((11, 5, 1), 32), call((9, 4, 2), 64)]
         return kernel["CUOccupancy"]
 
     @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
@@ -422,6 +434,45 @@ class TestGfx11CustomKernelOccupancy:
     def test_missing_directives_leave_the_default(self):
         asm = ".amdhsa_kernel bad_kernel\n.end_amdhsa_kernel\n"
         assert self._occupancy(asm, 256) == -1
+
+    @pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
+    def test_query_restores_the_thread_kernel(self):
+        # setKernel also clears the VGPR index map and MSB; all three come back.
+        from unittest.mock import MagicMock, call
+
+        mock_ti = MagicMock()
+        assert self._occupancy(_make_asm(183, 94, 36864), 256, mock_ti=mock_ti) == 2
+        assert mock_ti.setVgprIdx.call_args_list == [call("ValuC", 4)]
+        mock_ti.setVgprMsb.assert_called_with(1)
+
+
+@pytest.mark.skipif(not _KWA_AVAILABLE, reason="KernelWriterAssembly not importable")
+class TestGfx11CustomKernelOccupancyLeavesTheIsa:
+    """With the real rocisa singleton: a gfx1151 W4A16 custom kernel's occupancy
+    query must not leave the thread pinned to gfx1151. The gfx9 custom-kernel path
+    reads the singleton's caps without pinning its own ISA, so a gfx9 kernel handled
+    next on the same worker would otherwise get gfx1151's caps."""
+
+    def test_gfx9_caps_survive_a_gfx1151_query(self):
+        from rocisa import rocIsa
+
+        asm_path = shutil.which("amdclang++") or "/usr/bin/amdclang++"
+        if not os.path.exists(asm_path):
+            pytest.skip(f"amdclang++ not found at {asm_path}; cannot init rocisa")
+        ti = rocIsa.getInstance()
+        gfx942, gfx1151 = (9, 4, 2), (11, 5, 1)
+        ti.init(gfx942, asm_path)
+        ti.init(gfx1151, asm_path)
+        ti.setKernel(gfx942, 64)
+        gfx942Caps = (ti.getRegCaps(), ti.getArchCaps())
+
+        kwa = object.__new__(_KWA)
+        kernel = _KernelObj({"ISA": list(gfx1151), "WavefrontSize": 32, "NumThreads": 256})
+        occ = kwa._gfx11CustomW4A16KernelOccupancy(kernel, _make_asm(183, 94, 36864))
+
+        assert occ is not None
+        assert tuple(ti.getKernel().isa) == gfx942 and ti.getKernel().wavefrontSize == 64
+        assert (ti.getRegCaps(), ti.getArchCaps()) == gfx942Caps
 
 
 class TestPythonDebugWarning:

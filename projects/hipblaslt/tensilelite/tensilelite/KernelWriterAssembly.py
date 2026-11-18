@@ -111,7 +111,7 @@ from .Common import print2, printExit, printWarning, INDEX_CHARS, DebugConfig, D
 from .Components.NonTemporal import decodeNonTemporal, forceCoherentNonTemporal, tdmCacheModifiers
 from .Common.DataType import DataType
 from .Common.ScaleAlphaVec import scaleAlphaSupportsDeviceScalar
-from .Common.MatrixInstructionNaming import dataTypeNameAbbrevToInstType, matrixInstructionTypes
+from .Common.MatrixInstructionNaming import _pinnedKernelIsa, dataTypeNameAbbrevToInstType, matrixInstructionTypes
 from .Common.RegisterPool import RegisterPool, allocTmpGpr, allocTmpGprList
 from .Components.WorkGroupMappingAlgos import DefaultWGM, wgmXCC, SpaceFillingCurveWalk, \
   FusedA2AWgRemap
@@ -364,11 +364,13 @@ class KernelWriterAssembly(KernelWriter):
     ldsSize = directive("amdhsa_group_segment_fixed_size")  # LDS bytes per workgroup
     if vgprs is None or not sgprs or ldsSize is None:
       return None
-    # The caps are per kernel ISA, set as code generation sets them.
+    # The caps are per kernel ISA, set as code generation sets them. Pinned only for
+    # the query: other custom kernels on this thread (gfx9's below) read the
+    # singleton's caps without pinning their own ISA.
     ti = rocIsa.getInstance()
     try:
-      ti.setKernel(tuple(kernel["ISA"]), kernel.get("WavefrontSize", 32))
-      regCaps, archCaps = ti.getRegCaps(), ti.getArchCaps()
+      with _pinnedKernelIsa(kernel["ISA"], kernel.get("WavefrontSize", 32)):
+        regCaps, archCaps = ti.getRegCaps(), ti.getArchCaps()
       # getVgprOccupancy with doubleVgpr, as wave32 kernels are judged.
       # Workgroup size in blocks of 256 threads (at least one).
       multiplier = int(ceil(max(kernel["NumThreads"], 256) / 256.0))
