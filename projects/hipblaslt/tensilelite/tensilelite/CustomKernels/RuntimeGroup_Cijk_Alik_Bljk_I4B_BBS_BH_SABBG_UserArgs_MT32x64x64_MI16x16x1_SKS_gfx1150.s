@@ -4,13 +4,13 @@
 /******************************************/
 .amdgcn_target "amdgcn-amd-amdhsa--gfx1150"
 .text
-.protected RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150
-.globl RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150
+.protected RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150
+.globl RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150
 .p2align 8
-.type RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150,@function
+.type RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150,@function
 .section .rodata,#alloc
 .p2align 6
-.amdhsa_kernel RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150
+.amdhsa_kernel RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150
   .amdhsa_user_sgpr_kernarg_segment_ptr 1
   .amdhsa_next_free_vgpr 128 // vgprs
   .amdhsa_next_free_sgpr 89 // sgprs
@@ -47,13 +47,12 @@ custom.config:
     KernArgsVersion: 3
   StaggerU: 0
   TileProcessingStrategy: StreamK
-  WorkAssignment: StaticGrid
 amdhsa.version:
   - 1
   - 1
 amdhsa.kernels:
-  - .name: RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150
-    .symbol: 'RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150.kd'
+  - .name: RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150
+    .symbol: 'RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150.kd'
     .language:                   OpenCL C
     .language_version:
       - 2
@@ -264,7 +263,7 @@ amdhsa.kernels:
     .wavefront_size:             32
 ...
 .end_amdgpu_metadata
-RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SK_gfx1150:
+RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x64x64_MI16x16x1_SKS_gfx1150:
 label_ASM_Start:  /// Main body of the asm kernel
 
 /******************************************/
@@ -415,6 +414,10 @@ label_ASM_Start:  /// Main body of the asm kernel
 /******************************************/
 /* Allocate Resources                     */
 /******************************************/
+s_bitcmp1_b32 s[sgprWorkGroup0], 3                 // workgroup phase stagger: this workgroup shares a WGP with id - 2^bit?
+s_cbranch_scc0 label_WorkGroupPhaseStaggerEnd      // no: start now
+s_sleep 80                                         // start 5120 cycles later
+label_WorkGroupPhaseStaggerEnd:
 
 /* Load num of Gemms */
 s_load_b32 s44, s[sgprKernArgAddress:sgprKernArgAddress+1], 0

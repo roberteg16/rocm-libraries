@@ -4,15 +4,15 @@
 /******************************************/
 .amdgcn_target "amdgcn-amd-amdhsa--gfx1150"
 .text
-.protected RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150
-.globl RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150
+.protected RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150
+.globl RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150
 .p2align 8
-.type RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150,@function
+.type RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150,@function
 .section .rodata,#alloc
 .p2align 6
-.amdhsa_kernel RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150
+.amdhsa_kernel RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150
   .amdhsa_user_sgpr_kernarg_segment_ptr 1
-  .amdhsa_next_free_vgpr 96 // vgprs
+  .amdhsa_next_free_vgpr 112 // vgprs
   .amdhsa_next_free_sgpr 89 // sgprs
   .amdhsa_group_segment_fixed_size 13056 // lds bytes
   .amdhsa_wavefront_size32 1 // 32-thread wavefronts
@@ -25,7 +25,7 @@
   .amdhsa_float_denorm_mode_16_64 3
 .end_amdhsa_kernel
 .text
-/* Num VGPR   =96 */
+/* Num VGPR   =112 */
 /* Num AccVGPR=0 */
 /* Num SGPR   =89 */
 
@@ -36,7 +36,7 @@
 /* SubGroup= 2 x 16 */
 /* VectorWidthA=1 */
 /* VectorWidthB=1 */
-/* GlobalReadVectorWidthA=8, GlobalReadVectorWidthB=8 */
+/* GlobalReadVectorWidthA=32, GlobalReadVectorWidthB=8 */
 /* DirectToLdsA=False */
 /* DirectToLdsB=False */
 /* UseSgprForGRO=False */
@@ -47,13 +47,12 @@ custom.config:
     KernArgsVersion: 3
   StaggerU: 0
   TileProcessingStrategy: StreamK
-  WorkAssignment: StaticGrid
 amdhsa.version:
   - 1
   - 1
 amdhsa.kernels:
-  - .name: RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150
-    .symbol: 'RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150.kd'
+  - .name: RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150
+    .symbol: 'RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150.kd'
     .language:                   OpenCL C
     .language_version:
       - 2
@@ -259,12 +258,12 @@ amdhsa.kernels:
     .private_segment_fixed_size: 0
     .sgpr_count:                 89
     .sgpr_spill_count:           0
-    .vgpr_count:                 96
+    .vgpr_count:                 112
     .vgpr_spill_count:           0
     .wavefront_size:             32
 ...
 .end_amdgpu_metadata
-RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SK_gfx1150:
+RuntimeGroup_Cijk_Alik_Bljk_I4B_BBS_BH_SABBG_UserArgs_MT32x16x128_MI16x16x1_SKW_gfx1150:
 label_ASM_Start:  /// Main body of the asm kernel
 
 /******************************************/
@@ -282,16 +281,16 @@ label_ASM_Start:  /// Main body of the asm kernel
 /* ValuC range: [0-16), serializedStore enabled */
 .set vgprValuC, 0
 /* ValuA/B   Xn=PLR buffer idx,  In=InnerUnroll idx */
-.set vgprBase, 34
-.set vgprLocalWriteAddrA, 30
-.set vgprLocalWriteAddrB, 31
+.set vgprBase, 26
+.set vgprLocalWriteAddrA, 21
+.set vgprLocalWriteAddrB, 22
 .set vgprGlobalReadOffsetA, 16
-.set vgprGlobalReadOffsetB, 20
-.set vgprGlobalReadOffsetScaleA, 22
-.set vgprG2LScaleA, 26
-.set vgprLocalReadAddrA, 32
-.set vgprLocalReadAddrB, 33
-.set vgprSerial, 84
+.set vgprGlobalReadOffsetB, 17
+.set vgprGlobalReadOffsetScaleA, 19
+.set vgprG2LScaleA, 20
+.set vgprLocalReadAddrA, 76
+.set vgprLocalReadAddrB, 23
+.set vgprSerial, 77
 
 /******************************************/
 /* VGPR Macro Assignments                 */
@@ -383,7 +382,7 @@ label_ASM_Start:  /// Main body of the asm kernel
 .set MT1, 16
 .set DepthU, 128
 /* Number of elements to shift-left SRD */
-.set SrdShiftLeftA, 8
+.set SrdShiftLeftA, 32
 .set SrdShiftLeftB, 8
 /* 2GB limit - set offsets to -1 to exceed this and clamp */
 .set BufferLimit, 0xffffffff
@@ -454,9 +453,6 @@ s_mov_b32 s[sgprArgType], s45
 s_mov_b32 m0, 0x3300                               // LDS clamp at 13056 bytes
 v_mov_b32 v[vgprSerial], v0                        // thread serial id
 v_mov_b32 v[vgprG2LScaleA+0], 0                    // scaleA: low half of the f32 scale
-v_mov_b32 v[vgprG2LScaleA+1], 0                    // scaleA: low half of the f32 scale
-v_mov_b32 v[vgprG2LScaleA+2], 0                    // scaleA: low half of the f32 scale
-v_mov_b32 v[vgprG2LScaleA+3], 0                    // scaleA: low half of the f32 scale
 s_mov_b32 vcc_hi, 0                                // Ensure hi bits are zero
 
 /* remap workgroup to XCCs */
@@ -531,7 +527,7 @@ s_cbranch_scc1 label_ArgType3_Routed_To_ArgType0
 s_cmp_eq_u32 s45, 0
 s_cbranch_scc0 label_MultiGemm
 label_ArgType3_Routed_To_ArgType0:
-/* init: add vgpr [34...93) to pool */
+/* init: add vgpr [26...77) to pool */
 /* init: add vgpr [0...16) to pool */
 /* init: add agpr [0...0) to pool */
 s_waitcnt lgkmcnt(0)                               // wait for 128/0 bytes of kern args over preload
@@ -645,7 +641,7 @@ s_load_b32 s[sgprAlpha], s[sgprKernArgAddress:sgprKernArgAddress+1], 0x50
 s_load_b32 s33, s[sgprKernArgAddress:sgprKernArgAddress+1], 136 // 136
 s_load_b64 s[sgprAddressScaleA:sgprAddressScaleA+1], s[sgprKernArgAddress:sgprKernArgAddress+1], 0x8c
 label_LoadExternalStructEnd:
-/* init: add vgpr [34...93) to pool */
+/* init: add vgpr [26...77) to pool */
 /* init: add vgpr [0...16) to pool */
 /* init: add agpr [0...0) to pool */
 s_waitcnt lgkmcnt(0)                               // wait for 128/0 bytes of kern args over preload
@@ -673,7 +669,7 @@ label_MultiGemmEnd:
 s_and_b32 s44, s[sgprArgType], 0xff                // mask ArgType domain (bits 8+ are internal flags)
 s_cmp_eq_u32 s44, 3                                // ArgType == 3 for General Batched GEMM
 s_cbranch_scc1 label_Skip_Address_Prepad_For_Pointer_Array
-s_sub_u32 s[sgprAddressA+0], s[sgprAddressA+0], 4  // pre-pad to make room for possible pointer shift
+s_sub_u32 s[sgprAddressA+0], s[sgprAddressA+0], 16 // pre-pad to make room for possible pointer shift
 s_subb_u32 s[sgprAddressA+1], s[sgprAddressA+1], 0 // pre-pad to make room for possible pointer shift
 s_sub_u32 s[sgprAddressB+0], s[sgprAddressB+0], 16 // pre-pad to make room for possible pointer shift
 s_subb_u32 s[sgprAddressB+1], s[sgprAddressB+1], 0 // pre-pad to make room for possible pointer shift
@@ -1207,12 +1203,12 @@ v_add_co_u32 v[vgprLocalReadAddrB+0], vcc_lo, 0x2200, v[vgprLocalReadAddrB+0] //
 /******************************************/
 /* Local Write Addresses                  */
 /******************************************/
-/* LVCA = 16 */
+/* LVCA = 4 */
 /* v1 = A-unroll = serial%LVCA */
-v_lshrrev_b32 v0, 4, v[vgprSerial]                 // 0 = Serial / 16
-v_and_b32 v1, 15, v[vgprSerial]                    // 1 = Serial % 16
+v_lshrrev_b32 v0, 2, v[vgprSerial]                 // 0 = Serial / 4
+v_and_b32 v1, 3, v[vgprSerial]                     // 1 = Serial % 4
 /* unroll *= glvw */
-v_lshlrev_b32 v1, 3, v1                            // v1 = v1 * 8
+v_lshlrev_b32 v1, 5, v1                            // v1 = v1 * 32
 v_mov_b32 v4, v1                                   // copy for GlobalSplitU
 /* LVCB = 16 */
 /* v3 = B-unroll = serial%LVCB */
@@ -1256,19 +1252,16 @@ v_add_co_u32 v[vgprLocalWriteAddrB], vcc_lo, 0x2200, v[vgprLocalWriteAddrB] // l
 
 /* global read addresses: tile offsets a */
 v_mov_b32 v6, v0                                   // groA0I_0
-v_add_co_u32 v7, vcc_lo, 8, v6                     // groA0I_1 += LSPA
-v_add_co_u32 v8, vcc_lo, 8, v7                     // groA0I_2 += LSPA
-v_add_co_u32 v9, vcc_lo, 8, v8                     // groA0I_3 += LSPA
 
 /* global read addresses: tile offsets b */
-v_mov_b32 v10, v2                                  // groB1J_0
-v_add_co_u32 v11, vcc_lo, 8, v10                   // groB1J_1 += LSPB
+v_mov_b32 v7, v2                                   // groB1J_0
+v_add_co_u32 v8, vcc_lo, 8, v7                     // groB1J_1 += LSPB
 
 /* global read addresses: unroll offsets a */
-v_mov_b32 v12, v1                                  // groAL_0
+v_mov_b32 v9, v1                                   // groAL_0
 
 /* global read addresses: unroll offsets b */
-v_mov_b32 v13, v3                                  // groBL_0
+v_mov_b32 v10, v3                                  // groBL_0
 
 /* global read addresses: addresses a */
 /* max read offset = size[n] * stride[n-1] */
@@ -1295,7 +1288,7 @@ s_addc_u32 s[sgprShadowLimitA+1], s[sgprShadowLimitA+1], s45 // sum tensor size
 s_sub_u32 s[sgprShadowLimitA+0], s[sgprShadowLimitA+0], s46 // sub tileStart
 s_subb_u32 s[sgprShadowLimitA+1], s[sgprShadowLimitA+1], s47 // sub tileStart
 s_lshr_b64 s[sgprShadowLimitA:sgprShadowLimitA+1], s[sgprShadowLimitA:sgprShadowLimitA+1], 1 // Set limit to use bytes (multiple bpe)
-s_add_u32 s[sgprShadowLimitA+0], s[sgprShadowLimitA+0], 4 // extend limit for pre-pad
+s_add_u32 s[sgprShadowLimitA+0], s[sgprShadowLimitA+0], 16 // extend limit for pre-pad
 s_addc_u32 s[sgprShadowLimitA+1], s[sgprShadowLimitA+1], 0 // extend limit for pre-pad
 s_cmp_eq_u32 s[sgprShadowLimitA+1], 0              // are we within 2^32?
 s_cselect_b32 s[sgprSrdA+2], s[sgprShadowLimitA+0], BufferLimit // Move shadow to real if we are within 2^32
@@ -1313,7 +1306,7 @@ s_load_b64 s[44:45], s[sgprKernArgAddress:sgprKernArgAddress+1], 0xa0 // Load ba
 s_waitcnt lgkmcnt(0)                               // Wait for Matrix Address and Batch Offset Loads
 s_add_u32 s[sgprSrdA+0], s[sgprSrdA+0], s44        // Add batch offset to A address (low)
 s_addc_u32 s[sgprSrdA+1], s[sgprSrdA+1], s45       // Add batch offset to A address (high)
-s_sub_u32 s[sgprSrdA+0], s[sgprSrdA+0], 4          // pre-pad to make room for possible pointer shift
+s_sub_u32 s[sgprSrdA+0], s[sgprSrdA+0], 16         // pre-pad to make room for possible pointer shift
 s_subb_u32 s[sgprSrdA+1], s[sgprSrdA+1], 0         // pre-pad to make room for possible pointer shift
 s_lshr_b64 s[46:47], s[46:47], 1                   // tileStart (multiple bpe)
 s_add_u32 s[sgprSrdA+0], s46, s[sgprSrdA+0]        // SRD base = Address+ tileStart0
@@ -1433,48 +1426,24 @@ s_mov_b32 s[sgprSrdB+3], Srd127_96                 // Set bits 127_96 in SRD
 
 /* global read addresses: final offsets a */
 /* ============================================================= */
-v_mul_lo_u32 v34, s[sgprStrideA0I], v[6]           // mul d1 lower
-v_add_co_u32 v[vgprGlobalReadOffsetA+0+0], vcc_lo, v[12], v[34+0] // accumulate K lower
-v_add_nc_u32 v[vgprGlobalReadOffsetA+0+0], 0x8, v[vgprGlobalReadOffsetA+0+0] // add prepad for pointer shift
-v_lshrrev_b32 v34, s[sgprScaleAGShift], v12        // scaleA: kGroup = k/32
+v_mul_lo_u32 v11, s[sgprStrideA0I], v[6]           // mul d1 lower
+v_add_co_u32 v[vgprGlobalReadOffsetA+0+0], vcc_lo, v[9], v[11+0] // accumulate K lower
+v_add_nc_u32 v[vgprGlobalReadOffsetA+0+0], 0x20, v[vgprGlobalReadOffsetA+0+0] // add prepad for pointer shift
+v_lshrrev_b32 v11, s[sgprScaleAGShift], v9         // scaleA: kGroup = k/32
 v_mul_lo_u32 v[vgprGlobalReadOffsetScaleA+0], s[sgprStrideScaleA], v6 // scaleA: row * StrideScaleA
-v_add_nc_u32 v[vgprGlobalReadOffsetScaleA+0], v34, v[vgprGlobalReadOffsetScaleA+0] // scaleA: + kGroup
+v_add_nc_u32 v[vgprGlobalReadOffsetScaleA+0], v11, v[vgprGlobalReadOffsetScaleA+0] // scaleA: + kGroup
 v_lshlrev_b32 v[vgprGlobalReadOffsetScaleA+0], 1, v[vgprGlobalReadOffsetScaleA+0] // scaleA: elements -> bytes
 v_lshrrev_b32 v[vgprGlobalReadOffsetA+0], 1, v[vgprGlobalReadOffsetA+0] //  (multiple bpe)
-v_mul_lo_u32 v34, s[sgprStrideA0I], v[7]           // mul d1 lower
-v_add_co_u32 v[vgprGlobalReadOffsetA+1+0], vcc_lo, v[12], v[34+0] // accumulate K lower
-v_add_nc_u32 v[vgprGlobalReadOffsetA+1+0], 0x8, v[vgprGlobalReadOffsetA+1+0] // add prepad for pointer shift
-v_lshrrev_b32 v34, s[sgprScaleAGShift], v12        // scaleA: kGroup = k/32
-v_mul_lo_u32 v[vgprGlobalReadOffsetScaleA+1], s[sgprStrideScaleA], v7 // scaleA: row * StrideScaleA
-v_add_nc_u32 v[vgprGlobalReadOffsetScaleA+1], v34, v[vgprGlobalReadOffsetScaleA+1] // scaleA: + kGroup
-v_lshlrev_b32 v[vgprGlobalReadOffsetScaleA+1], 1, v[vgprGlobalReadOffsetScaleA+1] // scaleA: elements -> bytes
-v_lshrrev_b32 v[vgprGlobalReadOffsetA+1], 1, v[vgprGlobalReadOffsetA+1] //  (multiple bpe)
-v_mul_lo_u32 v34, s[sgprStrideA0I], v[8]           // mul d1 lower
-v_add_co_u32 v[vgprGlobalReadOffsetA+2+0], vcc_lo, v[12], v[34+0] // accumulate K lower
-v_add_nc_u32 v[vgprGlobalReadOffsetA+2+0], 0x8, v[vgprGlobalReadOffsetA+2+0] // add prepad for pointer shift
-v_lshrrev_b32 v34, s[sgprScaleAGShift], v12        // scaleA: kGroup = k/32
-v_mul_lo_u32 v[vgprGlobalReadOffsetScaleA+2], s[sgprStrideScaleA], v8 // scaleA: row * StrideScaleA
-v_add_nc_u32 v[vgprGlobalReadOffsetScaleA+2], v34, v[vgprGlobalReadOffsetScaleA+2] // scaleA: + kGroup
-v_lshlrev_b32 v[vgprGlobalReadOffsetScaleA+2], 1, v[vgprGlobalReadOffsetScaleA+2] // scaleA: elements -> bytes
-v_lshrrev_b32 v[vgprGlobalReadOffsetA+2], 1, v[vgprGlobalReadOffsetA+2] //  (multiple bpe)
-v_mul_lo_u32 v34, s[sgprStrideA0I], v[9]           // mul d1 lower
-v_add_co_u32 v[vgprGlobalReadOffsetA+3+0], vcc_lo, v[12], v[34+0] // accumulate K lower
-v_add_nc_u32 v[vgprGlobalReadOffsetA+3+0], 0x8, v[vgprGlobalReadOffsetA+3+0] // add prepad for pointer shift
-v_lshrrev_b32 v34, s[sgprScaleAGShift], v12        // scaleA: kGroup = k/32
-v_mul_lo_u32 v[vgprGlobalReadOffsetScaleA+3], s[sgprStrideScaleA], v9 // scaleA: row * StrideScaleA
-v_add_nc_u32 v[vgprGlobalReadOffsetScaleA+3], v34, v[vgprGlobalReadOffsetScaleA+3] // scaleA: + kGroup
-v_lshlrev_b32 v[vgprGlobalReadOffsetScaleA+3], 1, v[vgprGlobalReadOffsetScaleA+3] // scaleA: elements -> bytes
-v_lshrrev_b32 v[vgprGlobalReadOffsetA+3], 1, v[vgprGlobalReadOffsetA+3] //  (multiple bpe)
 /* ============================================================= */
 
 /* global read addresses: final offsets b */
 /* ============================================================= */
-v_mul_lo_u32 v6, s[sgprStrideB1J], v[10]           // mul d1 lower
-v_add_co_u32 v[vgprGlobalReadOffsetB+0+0], vcc_lo, v[13], v[6+0] // accumulate K lower
+v_mul_lo_u32 v11, s[sgprStrideB1J], v[7]           // mul d1 lower
+v_add_co_u32 v[vgprGlobalReadOffsetB+0+0], vcc_lo, v[10], v[11+0] // accumulate K lower
 v_add_nc_u32 v[vgprGlobalReadOffsetB+0+0], 0x8, v[vgprGlobalReadOffsetB+0+0] // add prepad for pointer shift
 v_lshlrev_b32 v[vgprGlobalReadOffsetB+0], 1, v[vgprGlobalReadOffsetB+0] //  (multiple bpe)
-v_mul_lo_u32 v6, s[sgprStrideB1J], v[11]           // mul d1 lower
-v_add_co_u32 v[vgprGlobalReadOffsetB+1+0], vcc_lo, v[13], v[6+0] // accumulate K lower
+v_mul_lo_u32 v11, s[sgprStrideB1J], v[8]           // mul d1 lower
+v_add_co_u32 v[vgprGlobalReadOffsetB+1+0], vcc_lo, v[10], v[11+0] // accumulate K lower
 v_add_nc_u32 v[vgprGlobalReadOffsetB+1+0], 0x8, v[vgprGlobalReadOffsetB+1+0] // add prepad for pointer shift
 v_lshlrev_b32 v[vgprGlobalReadOffsetB+1], 1, v[vgprGlobalReadOffsetB+1] //  (multiple bpe)
 /* ============================================================= */
@@ -1490,7 +1459,7 @@ v_lshlrev_b32 v[vgprGlobalReadOffsetB+1], 1, v[vgprGlobalReadOffsetB+1] //  (mul
 
 /* initC: remove acc vgpr buffer [0...0) from pool */
 
-/* initC: remove ValuA/B vgpr buffer [34...59) from pool */
+/* initC: remove ValuA/B vgpr buffer [26...51) from pool */
 v_mov_b32 v[vgprValuC+0], 0                        // initC
 v_mov_b32 v[vgprValuC+1], 0                        // initC
 v_mov_b32 v[vgprValuC+2], 0                        // initC
@@ -1531,16 +1500,10 @@ s_add_u32 s44, s44, s46                            // add target branch offset
 s_addc_u32 s45, s45, 0                             // add high and carry
 s_setpc_b64 s[44:45]                               // branch to label_PrefetchGlobalLastIterEnd
 label_NoBranch_6:
-buffer_load_b32 v[vgprG2LA+2], v[vgprGlobalReadOffsetA+0], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_0_0
-buffer_load_b32 v[vgprG2LA+6], v[vgprGlobalReadOffsetA+1], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_1_0
-buffer_load_b32 v[vgprG2LA+10], v[vgprGlobalReadOffsetA+2], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_2_0
-buffer_load_b32 v[vgprG2LA+14], v[vgprGlobalReadOffsetA+3], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_3_0
+buffer_load_b128 v[vgprG2LA+12:vgprG2LA+12+3], v[vgprGlobalReadOffsetA+0], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_0_0
 
 /* global read block-scale A */
 buffer_load_d16_hi_b16 v[vgprG2LScaleA+0], v[vgprGlobalReadOffsetScaleA+0], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 0 as f32
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+1], v[vgprGlobalReadOffsetScaleA+1], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 1 as f32
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+2], v[vgprGlobalReadOffsetScaleA+2], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 2 as f32
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+3], v[vgprGlobalReadOffsetScaleA+3], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 3 as f32
 buffer_load_b128 v[vgprG2LB+0:vgprG2LB+0+3], v[vgprGlobalReadOffsetB+0], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_0_0
 buffer_load_b128 v[vgprG2LB+4:vgprG2LB+4+3], v[vgprGlobalReadOffsetB+1], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_1_0
 
@@ -1575,125 +1538,119 @@ s_waitcnt vmcnt(0)                                 // wait for global read
 s_barrier                                          // For stream-k / persistent loop
 
 /* local write a */
-v_mov_b32 v87, v[vgprG2LScaleA+0]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v86, 0x88888888, v[vgprG2LA+2+0]         // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v86, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v86, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v86, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v86, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v26, v88 :: v_dual_mul_f32 v89, v87, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v26, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v87, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_and_or_b32 v92, v86, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v86, 20, v86                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v93, v86, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v95, v86, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v94, v86, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v92, s[sgprScaleALiftMagic+10], v92 :: v_dual_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91 // w4a16: n - c, exact :: round (first half)
-v_dual_subrev_f32 v93, s[sgprScaleALiftMagic+6], v93 :: v_dual_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90 // w4a16: n - c, exact :: round (first half)
-v_dual_subrev_f32 v95, s[sgprScaleALiftMagic+7], v95 :: v_dual_subrev_f32 v94, s[sgprScaleALiftMagic+8], v94 // w4a16: n - c, exact
-v_perm_b32 v[vgprG2LA+0+0], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+0+1], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-v_dual_mul_f32 v92, v26, v92 :: v_dual_mul_f32 v93, v87, v93 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v95, v26, v95 :: v_dual_add_nc_u32 v92, s[sgprScaleALiftMagic+5], v92 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v94, v87, v94 :: v_dual_add_nc_u32 v93, s[sgprScaleALiftMagic+5], v93 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v95, s[sgprScaleALiftMagic+5], v95    // w4a16: round
-v_add_nc_u32 v94, s[sgprScaleALiftMagic+5], v94    // w4a16: round
-v_perm_b32 v[vgprG2LA+0+2], v93, v92, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+0+3], v94, v95, 0x07060302   // w4a16: pack 2 bf16
+v_mov_b32 v78, v[vgprG2LScaleA+0]                  // scaleA: copy on the other VGPR bank
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+0]        // w4a16: save packed int4 dword 0, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+0], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+1], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+2], v85, v84, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+3], v86, v87, 0x07060302   // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+1]        // w4a16: save packed int4 dword 1, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+4], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+5], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+6], v85, v84, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+7], v86, v87, 0x07060302   // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+2]        // w4a16: save packed int4 dword 2, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+8], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+9], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+10], v85, v84, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+11], v86, v87, 0x07060302  // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+3]        // w4a16: save packed int4 dword 3, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+12], v81, v80, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+13], v82, v83, 0x07060302  // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+14], v85, v84, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+15], v86, v87, 0x07060302  // w4a16: pack 2 bf16
 ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+0:vgprG2LA+0+3] offset:0 // lwoA_0_0_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 0 sync LDS0
-v_mov_b32 v86, v[vgprG2LScaleA+1]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v87, 0x88888888, v[vgprG2LA+6+0]         // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v87, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v27, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v27, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+4+0], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+4+1], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-v_and_or_b32 v88, v87, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v87, 20, v87                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v27, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v27, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+4+2], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+4+3], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+4:vgprG2LA+4+3] offset:2176 // lwoA_0_0_1_0 = (0*LSCA)*(MT0I+PAD) + (1*LSPA) = 2176 sync LDS0
-v_mov_b32 v86, v[vgprG2LScaleA+2]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v87, 0x88888888, v[vgprG2LA+10+0]        // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v87, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v28, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v28, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+8+0], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+8+1], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-v_and_or_b32 v88, v87, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v87, 20, v87                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v28, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v28, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+8+2], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+8+3], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+8:vgprG2LA+8+3] offset:4352 // lwoA_0_0_2_0 = (0*LSCA)*(MT0I+PAD) + (2*LSPA) = 4352 sync LDS0
-v_mov_b32 v86, v[vgprG2LScaleA+3]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v87, 0x88888888, v[vgprG2LA+14+0]        // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v87, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v29, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v29, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+12+0], v89, v88, 0x07060302  // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+12+1], v90, v91, 0x07060302  // w4a16: pack 2 bf16
-v_and_or_b32 v88, v87, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v87, 20, v87                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v29, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v29, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+12+2], v89, v88, 0x07060302  // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+12+3], v90, v91, 0x07060302  // w4a16: pack 2 bf16
-ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+12:vgprG2LA+12+3] offset:6528 // lwoA_0_0_3_0 = (0*LSCA)*(MT0I+PAD) + (3*LSPA) = 6528 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+4:vgprG2LA+4+3] offset:16 // lwoA_0_0_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 0 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+8:vgprG2LA+8+3] offset:32 // lwoA_0_16_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 32 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+12:vgprG2LA+12+3] offset:48 // lwoA_0_16_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 32 sync LDS0
 
 /* local write b */
 ds_store_b128 v[vgprLocalWriteAddrB+0], v[vgprG2LB+0:vgprG2LB+0+3] offset:0 // lwoB_0_0_0_0 = (0*LSCB)*(MT1J+PAD) + (0*LSPB) = 0 sync LDS0
@@ -1702,12 +1659,25 @@ ds_store_b128 v[vgprLocalWriteAddrB+0], v[vgprG2LB+4:vgprG2LB+4+3] offset:2176 /
 /* local write swap a */
 
 /* local write swap b */
+s_cmp_eq_u32 s[sgprLoopCounterL], 0x1              // PGR=2 but only 1 loop
+s_cbranch_scc1 label_skipPGR2_1                    // PGR=2 but only 1 loop
+buffer_load_b128 v[vgprG2LA+12:vgprG2LA+12+3], v[vgprGlobalReadOffsetA+0], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_0_0
+
+/* global read block-scale A */
+buffer_load_d16_hi_b16 v[vgprG2LScaleA+0], v[vgprGlobalReadOffsetScaleA+0], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 0 as f32
+buffer_load_b128 v[vgprG2LB+0:vgprG2LB+0+3], v[vgprGlobalReadOffsetB+0], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_0_0
+buffer_load_b128 v[vgprG2LB+4:vgprG2LB+4+3], v[vgprGlobalReadOffsetB+1], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_1_0
+s_branch label_skipPGR2_2                          // jump to PGR=2 label
+label_skipPGR2_1:
+label_skipPGR2_2:
 
 /******************************************/
 /* Unrolled Loop(s) - Begin               */
 /******************************************/
 label_openLoopL:
-s_cmp_le_u32 s[sgprLoopCounterL], 0x1              // LoopCounterL < EndCounter
+s_cmp_eq_u32 s[sgprLoopCounterL], 0x1              // LoopCounterL == 1 (PGR>=2, not Suppress: single-loop -> toPGR1)
+s_cbranch_scc1 label_toPGR1                        // PGR=2 but only 1 loop, toPGR1
+s_cmp_le_u32 s[sgprLoopCounterL], 0x2              // LoopCounterL < EndCounter
 s_cbranch_scc1 label_LoopEndL                      // do not enter LoopL
 .align 16
 label_LoopBeginL:
@@ -1731,22 +1701,10 @@ ds_load_b128 v[vgprValuB_X0_I0+0:vgprValuB_X0_I0+0+3], v[vgprLocalReadAddrB+0] o
 ds_load_b128 v[vgprValuB_X0_I0+4:vgprValuB_X0_I0+4+3], v[vgprLocalReadAddrB+0] offset:16 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
 ds_load_b128 v[vgprValuA_X0_I0+8:vgprValuA_X0_I0+8+3], v[vgprLocalReadAddrA+0] offset:4352 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=1 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
 ds_load_b128 v[vgprValuA_X0_I0+12:vgprValuA_X0_I0+12+3], v[vgprLocalReadAddrA+0] offset:4368 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=1 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
-buffer_load_b32 v[vgprG2LA+2], v[vgprGlobalReadOffsetA+0], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_0_0
 s_waitcnt lgkmcnt(2)                               // Wait for dependent lr
 v_wmma_f32_16x16x16_bf16 v[vgprValuC+0:vgprValuC+0+7], v[vgprValuB_X0_I0+0+0+0:vgprValuB_X0_I0+0+0+0+7], v[vgprValuA_X0_I0+0+0+0:vgprValuA_X0_I0+0+0+0+7], v[vgprValuC+0:vgprValuC+0+7] // left value = v[0+0:7+0]
 /*  mfmaIndex:1  */
 /* localReadsVacancy: latencyLeft 5 */
-buffer_load_b32 v[vgprG2LA+6], v[vgprGlobalReadOffsetA+1], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_1_0
-buffer_load_b32 v[vgprG2LA+10], v[vgprGlobalReadOffsetA+2], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_2_0
-buffer_load_b32 v[vgprG2LA+14], v[vgprGlobalReadOffsetA+3], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_3_0
-
-/* global read block-scale A */
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+0], v[vgprGlobalReadOffsetScaleA+0], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 0 as f32
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+1], v[vgprGlobalReadOffsetScaleA+1], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 1 as f32
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+2], v[vgprGlobalReadOffsetScaleA+2], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 2 as f32
-buffer_load_d16_hi_b16 v[vgprG2LScaleA+3], v[vgprGlobalReadOffsetScaleA+3], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 3 as f32
-buffer_load_b128 v[vgprG2LB+0:vgprG2LB+0+3], v[vgprGlobalReadOffsetB+0], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_0_0
-buffer_load_b128 v[vgprG2LB+4:vgprG2LB+4+3], v[vgprGlobalReadOffsetB+1], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_1_0
 
 /* global read inc A loopL */
 s_add_u32 s[sgprSrdA+0], s[sgprSrdA+0], GlobalReadIncsA // gra SRD += inc(lower)
@@ -1793,140 +1751,133 @@ v_wmma_f32_16x16x16_bf16 v[vgprValuC+0:vgprValuC+0+7], v[vgprValuB_X0_I0+0+0+0:v
 s_subb_u32 s[sgprShadowLimitB+1], s[sgprShadowLimitB+1], 0x0 // limit -= inc)
 s_cmp_eq_u32 s[sgprShadowLimitB+1], 0              // are we within 2^32?
 s_cmov_b32 s[sgprSrdB+2], s[sgprShadowLimitB+0]    // Move shadow to real if we are within 2^32
-/* sched write - iter 1 writesPerItem=1 */
-s_waitcnt vmcnt(5)                                 // wait for global read before writing to local
-v_mov_b32 v87, v[vgprG2LScaleA+0]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v86, 0x88888888, v[vgprG2LA+2+0]         // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v86, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v86, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v86, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v86, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v26, v88 :: v_dual_mul_f32 v89, v87, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v26, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v87, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+0+0], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+0+1], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-v_and_or_b32 v88, v86, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v86, 20, v86                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v86, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v86, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v86, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v26, v88 :: v_dual_mul_f32 v89, v87, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v26, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v87, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+0+2], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+0+3], v90, v91, 0x07060302   // w4a16: pack 2 bf16
+/* sched write - iter 1 writesPerItem=2 */
+s_waitcnt vmcnt(2)                                 // wait for global read before writing to local
+v_mov_b32 v78, v[vgprG2LScaleA+0]                  // scaleA: copy on the other VGPR bank
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+0]        // w4a16: save packed int4 dword 0, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+0], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+1], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+2], v85, v84, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+3], v86, v87, 0x07060302   // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+1]        // w4a16: save packed int4 dword 1, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+4], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+5], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+6], v85, v84, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+7], v86, v87, 0x07060302   // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+2]        // w4a16: save packed int4 dword 2, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+8], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+9], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+10], v85, v84, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+11], v86, v87, 0x07060302  // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+3]        // w4a16: save packed int4 dword 3, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+12], v81, v80, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+13], v82, v83, 0x07060302  // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+14], v85, v84, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+15], v86, v87, 0x07060302  // w4a16: pack 2 bf16
 ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+0:vgprG2LA+0+3] offset:0 // lwoA_0_0_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 0 sync LDS0
-/* sched write - iter 1 writesPerItem=1 */
-s_waitcnt vmcnt(4)                                 // wait for global read before writing to local
-v_mov_b32 v86, v[vgprG2LScaleA+1]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v87, 0x88888888, v[vgprG2LA+6+0]         // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v87, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v27, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v27, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+4+0], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+4+1], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-v_and_or_b32 v88, v87, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v87, 20, v87                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v27, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v27, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+4+2], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+4+3], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+4:vgprG2LA+4+3] offset:2176 // lwoA_0_0_1_0 = (0*LSCA)*(MT0I+PAD) + (1*LSPA) = 2176 sync LDS0
-/* sched write - iter 1 writesPerItem=1 */
-s_waitcnt vmcnt(3)                                 // wait for global read before writing to local
-v_mov_b32 v86, v[vgprG2LScaleA+2]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v87, 0x88888888, v[vgprG2LA+10+0]        // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v87, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v28, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v28, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+8+0], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+8+1], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-v_and_or_b32 v88, v87, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v87, 20, v87                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v28, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v28, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+8+2], v89, v88, 0x07060302   // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+8+3], v90, v91, 0x07060302   // w4a16: pack 2 bf16
-ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+8:vgprG2LA+8+3] offset:4352 // lwoA_0_0_2_0 = (0*LSCA)*(MT0I+PAD) + (2*LSPA) = 4352 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+4:vgprG2LA+4+3] offset:16 // lwoA_0_0_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 0 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+8:vgprG2LA+8+3] offset:32 // lwoA_0_16_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 32 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+12:vgprG2LA+12+3] offset:48 // lwoA_0_16_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 32 sync LDS0
+buffer_load_b128 v[vgprG2LA+12:vgprG2LA+12+3], v[vgprGlobalReadOffsetA+0], s[sgprSrdA:sgprSrdA+3], 0 offen offset:0 // G -> Reg 0_0_0_0
 /* sched write - iter 1 writesPerItem=1 */
 s_waitcnt vmcnt(2)                                 // wait for global read before writing to local
-v_mov_b32 v86, v[vgprG2LScaleA+3]                  // scaleA: copy on the other VGPR bank
-v_xor_b32 v87, 0x88888888, v[vgprG2LA+14+0]        // w4a16: save packed int4 dword 0, biased to unsigned
-v_and_or_b32 v88, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
-v_and_or_b32 v89, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
-v_and_or_b32 v91, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
-v_and_or_b32 v90, v87, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+6], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+7], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+8], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+9], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v29, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v29, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+12+0], v89, v88, 0x07060302  // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+12+1], v90, v91, 0x07060302  // w4a16: pack 2 bf16
-v_and_or_b32 v88, v87, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
-v_lshrrev_b32 v87, 20, v87                         // w4a16: nibbles 5-7 down to 0-2
-v_and_or_b32 v89, v87, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
-v_and_or_b32 v91, v87, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
-v_and_or_b32 v90, v87, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
-v_dual_subrev_f32 v88, s[sgprScaleALiftMagic+10], v88 :: v_dual_subrev_f32 v89, s[sgprScaleALiftMagic+6], v89 // w4a16: n - c, exact
-v_dual_subrev_f32 v91, s[sgprScaleALiftMagic+7], v91 :: v_dual_subrev_f32 v90, s[sgprScaleALiftMagic+8], v90 // w4a16: n - c, exact
-v_dual_mul_f32 v88, v29, v88 :: v_dual_mul_f32 v89, v86, v89 // w4a16: (n - c) * s, exact
-v_dual_mul_f32 v91, v29, v91 :: v_dual_add_nc_u32 v88, s[sgprScaleALiftMagic+5], v88 // w4a16: (n - c) * s :: round
-v_dual_mul_f32 v90, v86, v90 :: v_dual_add_nc_u32 v89, s[sgprScaleALiftMagic+5], v89 // w4a16: (n - c) * s :: round
-v_add_nc_u32 v91, s[sgprScaleALiftMagic+5], v91    // w4a16: round
-v_add_nc_u32 v90, s[sgprScaleALiftMagic+5], v90    // w4a16: round
-v_perm_b32 v[vgprG2LA+12+2], v89, v88, 0x07060302  // w4a16: pack 2 bf16
-v_perm_b32 v[vgprG2LA+12+3], v90, v91, 0x07060302  // w4a16: pack 2 bf16
-ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+12:vgprG2LA+12+3] offset:6528 // lwoA_0_0_3_0 = (0*LSCA)*(MT0I+PAD) + (3*LSPA) = 6528 sync LDS0
-/* sched write - iter 1 writesPerItem=1 */
-s_waitcnt vmcnt(1)                                 // wait for global read before writing to local
 ds_store_b128 v[vgprLocalWriteAddrB+0], v[vgprG2LB+0:vgprG2LB+0+3] offset:0 // lwoB_0_0_0_0 = (0*LSCB)*(MT1J+PAD) + (0*LSPB) = 0 sync LDS0
+
+/* global read block-scale A */
+buffer_load_d16_hi_b16 v[vgprG2LScaleA+0], v[vgprGlobalReadOffsetScaleA+0], s[sgprSrdScaleA:sgprSrdScaleA+3], 0 offen offset:0 // load block scale for A load 0 as f32
 /* sched write - iter 1 writesPerItem=1 */
-s_waitcnt vmcnt(0)                                 // wait for global read before writing to local
+s_waitcnt vmcnt(2)                                 // wait for global read before writing to local
 ds_store_b128 v[vgprLocalWriteAddrB+0], v[vgprG2LB+4:vgprG2LB+4+3] offset:2176 // lwoB_0_0_1_0 = (0*LSCB)*(MT1J+PAD) + (1*LSPB) = 2176 sync LDS0
+buffer_load_b128 v[vgprG2LB+0:vgprG2LB+0+3], v[vgprGlobalReadOffsetB+0], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_0_0
+buffer_load_b128 v[vgprG2LB+4:vgprG2LB+4+3], v[vgprGlobalReadOffsetB+1], s[sgprSrdB:sgprSrdB+3], 0 offen offset:0 // G -> Reg 0_0_1_0
 
 /* local write swap offsets a */
 
@@ -1954,11 +1905,225 @@ v_wmma_f32_16x16x16_bf16 v[vgprValuC+8:vgprValuC+8+7], v[vgprValuB_X0_I0+0+0+0:v
 
 /* closeLoop loopL finalLoop=1 tailLoop=0 */
 s_sub_u32 s[sgprLoopCounterL], s[sgprLoopCounterL], 1 // dec counterL
-s_cmp_eq_i32 s[sgprLoopCounterL], 0x1              // counterL==1
+s_cmp_eq_i32 s[sgprLoopCounterL], 0x2              // counterL==2
 s_cbranch_scc0 label_LoopBeginL                    // restart LoopL
 label_LoopEndL:
 
 /* Before NLL: Check VGPR.checkin for INT8 LW */
+
+/******************************************/
+/* Ord. NoGlobalLoadLoop_1 - Begin        */
+/******************************************/
+s_waitcnt lgkmcnt(0)                               // 4wait for local write
+s_waitcnt lgkmcnt(0)                               // extra navi wait
+s_barrier                                          // wait for local write done, sync
+
+/* iter 0 */
+/*  grEndMfmaIndex:3, lwStartMfmaIndex:3, lwEndMfmaIndex:3  */
+/*  numMfmaForLR:1, syncPlrMfmaIndex:0 , sync1LdsMfmaIndex:2 */
+/*  mfmaIndex:0  */
+ds_load_b128 v[vgprValuA_X0_I0+0:vgprValuA_X0_I0+0+3], v[vgprLocalReadAddrA+0] offset:0 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuA_X0_I0+4:vgprValuA_X0_I0+4+3], v[vgprLocalReadAddrA+0] offset:16 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuB_X0_I0+0:vgprValuB_X0_I0+0+3], v[vgprLocalReadAddrB+0] offset:0 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuB_X0_I0+4:vgprValuB_X0_I0+4+3], v[vgprLocalReadAddrB+0] offset:16 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuA_X0_I0+8:vgprValuA_X0_I0+8+3], v[vgprLocalReadAddrA+0] offset:4352 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=1 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuA_X0_I0+12:vgprValuA_X0_I0+12+3], v[vgprLocalReadAddrA+0] offset:4368 // L -> Reg lro=0 swapByteOffset=0 ti=16 vIdx=1 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
+
+/* Global Read IncA */
+
+/* global read inc A loopL */
+s_add_u32 s[sgprSrdA+0], s[sgprSrdA+0], GlobalReadIncsA // gra SRD += inc(lower)
+s_addc_u32 s[sgprSrdA+1], s[sgprSrdA+1], 0x0       // gra SRD += inc(upper)
+s_sub_u32 s[sgprShadowLimitA+0], s[sgprShadowLimitA+0], GlobalReadIncsA // limit -= inc)
+s_subb_u32 s[sgprShadowLimitA+1], s[sgprShadowLimitA+1], 0x0 // limit -= inc)
+s_cmp_eq_u32 s[sgprShadowLimitA+1], 0              // are we within 2^32?
+s_cmov_b32 s[sgprSrdA+2], s[sgprShadowLimitA+0]    // Move shadow to real if we are within 2^32
+
+/* global read inc block-scale A (2 bytes every 1 iters) */
+s_add_u32 s[sgprScaleAKCnt], s[sgprScaleAKCnt], 1  // scaleA: one more K iteration done
+s_and_b32 s44, s[sgprScaleAKCnt], s[sgprScaleAKMask] // scaleA: SCC = counter has not wrapped
+s_cselect_b32 s44, 0, s[sgprScaleAInc]             // scaleA: advance only on a wrap
+s_add_u32 s[sgprSrdScaleA+0], s[sgprSrdScaleA+0], s44 // scaleA SRD += inc(lower)
+s_addc_u32 s[sgprSrdScaleA+1], s[sgprSrdScaleA+1], 0 // scaleA SRD += inc(upper)
+s_sub_u32 s[sgprSrdScaleA+2], s[sgprSrdScaleA+2], s44 // scaleA limit -= inc
+
+/* Global Read IncB */
+
+/* global read inc B loopL */
+s_add_u32 s[sgprSrdB+0], s[sgprSrdB+0], GlobalReadIncsB // gra SRD += inc(lower)
+s_addc_u32 s[sgprSrdB+1], s[sgprSrdB+1], 0x0       // gra SRD += inc(upper)
+s_sub_u32 s[sgprShadowLimitB+0], s[sgprShadowLimitB+0], GlobalReadIncsB // limit -= inc)
+s_subb_u32 s[sgprShadowLimitB+1], s[sgprShadowLimitB+1], 0x0 // limit -= inc)
+s_cmp_eq_u32 s[sgprShadowLimitB+1], 0              // are we within 2^32?
+s_cmov_b32 s[sgprSrdB+2], s[sgprShadowLimitB+0]    // Move shadow to real if we are within 2^32
+s_waitcnt lgkmcnt(2)                               // Wait for dependent lr
+v_wmma_f32_16x16x16_bf16 v[vgprValuC+0:vgprValuC+0+7], v[vgprValuB_X0_I0+0+0+0:vgprValuB_X0_I0+0+0+0+7], v[vgprValuA_X0_I0+0+0+0:vgprValuA_X0_I0+0+0+0+7], v[vgprValuC+0:vgprValuC+0+7] // left value = v[0+0:7+0]
+/*  mfmaIndex:1  */
+/* localReadsVacancy: latencyLeft 5 */
+s_waitcnt lgkmcnt(0)                               // Wait for dependent lr
+v_wmma_f32_16x16x16_bf16 v[vgprValuC+8:vgprValuC+8+7], v[vgprValuB_X0_I0+0+0+0:vgprValuB_X0_I0+0+0+0+7], v[vgprValuA_X0_I0+8+0+0:vgprValuA_X0_I0+8+0+0+7], v[vgprValuC+8:vgprValuC+8+7] // left value = v[8+0:15+0]
+/* numPrefetchIter=0 */
+/* dataAtIterA=0 numReadsIterA=1 skipReadsIterA=0 readsPerIterA=4 */
+/* dataAtIterB=0 numReadsIterB=1 skipReadsIterB=0 readsPerIterB=2 */
+
+/* iter 1 (reset local read pointers iteration)  (swap and reset local write pointers iteration)  (swap local read pointers iteration)  */
+/*  grEndMfmaIndex:3, lwStartMfmaIndex:3, lwEndMfmaIndex:3  */
+/*  numMfmaForLR:1, syncPlrMfmaIndex:0 , sync1LdsMfmaIndex:2 */
+/*  mfmaIndex:2  */
+/* schedule remaining localreads for one buffer scheduling */
+ds_load_b128 v[vgprValuA_X0_I0+0:vgprValuA_X0_I0+0+3], v[vgprLocalReadAddrA+0] offset:32 // L -> Reg lro=16 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuA_X0_I0+4:vgprValuA_X0_I0+4+3], v[vgprLocalReadAddrA+0] offset:48 // L -> Reg lro=16 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuB_X0_I0+0:vgprValuB_X0_I0+0+3], v[vgprLocalReadAddrB+0] offset:32 // L -> Reg lro=16 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuB_X0_I0+4:vgprValuB_X0_I0+4+3], v[vgprLocalReadAddrB+0] offset:48 // L -> Reg lro=16 swapByteOffset=0 ti=16 vIdx=0 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuA_X0_I0+8:vgprValuA_X0_I0+8+3], v[vgprLocalReadAddrA+0] offset:4384 // L -> Reg lro=16 swapByteOffset=0 ti=16 vIdx=1 eIdx=0 rIdx=0 oIdx=0 buffer=0 iui=0 sync LDS0
+ds_load_b128 v[vgprValuA_X0_I0+12:vgprValuA_X0_I0+12+3], v[vgprLocalReadAddrA+0] offset:4400 // L -> Reg lro=16 swapByteOffset=0 ti=16 vIdx=1 eIdx=0 rIdx=1 oIdx=0 buffer=0 iui=0 sync LDS0
+/* 1 LDS buffer: read-sync-write */
+s_waitcnt lgkmcnt(0)
+s_barrier
+v_wmma_f32_16x16x16_bf16 v[vgprValuC+0:vgprValuC+0+7], v[vgprValuB_X0_I0+0+0+0:vgprValuB_X0_I0+0+0+0+7], v[vgprValuA_X0_I0+0+0+0:vgprValuA_X0_I0+0+0+0+7], v[vgprValuC+0:vgprValuC+0+7] // left value = v[0+0:7+0]
+/*  mfmaIndex:3  */
+/* sched write - iter 1 writesPerItem=2 */
+s_waitcnt vmcnt(2)                                 // wait for global read before writing to local
+v_mov_b32 v78, v[vgprG2LScaleA+0]                  // scaleA: copy on the other VGPR bank
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+0]        // w4a16: save packed int4 dword 0, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+0], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+1], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+2], v85, v84, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+3], v86, v87, 0x07060302   // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+1]        // w4a16: save packed int4 dword 1, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+4], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+5], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+6], v85, v84, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+7], v86, v87, 0x07060302   // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+2]        // w4a16: save packed int4 dword 2, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+8], v81, v80, 0x07060302   // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+9], v82, v83, 0x07060302   // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+10], v85, v84, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+11], v86, v87, 0x07060302  // w4a16: pack 2 bf16
+v_xor_b32 v79, 0x88888888, v[vgprG2LA+12+3]        // w4a16: save packed int4 dword 3, biased to unsigned
+v_and_or_b32 v80, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #0 -> f32 2^23 + n
+v_and_or_b32 v81, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #1 -> f32 2^19 + n
+v_and_or_b32 v83, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #2 -> f32 2^15 + n
+v_and_or_b32 v82, v79, 0xf000, s[sgprScaleALiftMagic+3] // w4a16: int4 #3 -> f32 2^11 + n
+v_dual_subrev_f32 v80, s[sgprScaleALiftMagic+6], v80 :: v_dual_subrev_f32 v81, s[sgprScaleALiftMagic+7], v81 // w4a16: n - c, exact
+v_dual_subrev_f32 v83, s[sgprScaleALiftMagic+8], v83 :: v_dual_subrev_f32 v82, s[sgprScaleALiftMagic+9], v82 // w4a16: n - c, exact
+v_dual_mul_f32 v80, v20, v80 :: v_dual_mul_f32 v81, v78, v81 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v83, v20, v83 :: v_dual_add_nc_u32 v80, s[sgprScaleALiftMagic+5], v80 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v82, v78, v82 :: v_dual_add_nc_u32 v81, s[sgprScaleALiftMagic+5], v81 // w4a16: (n - c) * s :: round
+v_and_or_b32 v84, v79, 0xf0000, s[sgprScaleALiftMagic+4] // w4a16: int4 #4 -> f32 2^7 + n
+v_lshrrev_b32 v79, 20, v79                         // w4a16: nibbles 5-7 down to 0-2
+v_and_or_b32 v85, v79, 0xf, s[sgprScaleALiftMagic+0] // w4a16: int4 #5 -> f32 2^23 + n
+v_and_or_b32 v87, v79, 0xf0, s[sgprScaleALiftMagic+1] // w4a16: int4 #6 -> f32 2^19 + n
+v_and_or_b32 v86, v79, 0xf00, s[sgprScaleALiftMagic+2] // w4a16: int4 #7 -> f32 2^15 + n
+v_dual_subrev_f32 v84, s[sgprScaleALiftMagic+10], v84 :: v_dual_add_nc_u32 v83, s[sgprScaleALiftMagic+5], v83 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v85, s[sgprScaleALiftMagic+6], v85 :: v_dual_add_nc_u32 v82, s[sgprScaleALiftMagic+5], v82 // w4a16: n - c, exact :: round (first half)
+v_dual_subrev_f32 v87, s[sgprScaleALiftMagic+7], v87 :: v_dual_subrev_f32 v86, s[sgprScaleALiftMagic+8], v86 // w4a16: n - c, exact
+v_perm_b32 v[vgprG2LA+0+12], v81, v80, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+13], v82, v83, 0x07060302  // w4a16: pack 2 bf16
+v_dual_mul_f32 v84, v20, v84 :: v_dual_mul_f32 v85, v78, v85 // w4a16: (n - c) * s, exact
+v_dual_mul_f32 v87, v20, v87 :: v_dual_add_nc_u32 v84, s[sgprScaleALiftMagic+5], v84 // w4a16: (n - c) * s :: round
+v_dual_mul_f32 v86, v78, v86 :: v_dual_add_nc_u32 v85, s[sgprScaleALiftMagic+5], v85 // w4a16: (n - c) * s :: round
+v_add_nc_u32 v87, s[sgprScaleALiftMagic+5], v87    // w4a16: round
+v_add_nc_u32 v86, s[sgprScaleALiftMagic+5], v86    // w4a16: round
+v_perm_b32 v[vgprG2LA+0+14], v85, v84, 0x07060302  // w4a16: pack 2 bf16
+v_perm_b32 v[vgprG2LA+0+15], v86, v87, 0x07060302  // w4a16: pack 2 bf16
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+0:vgprG2LA+0+3] offset:0 // lwoA_0_0_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 0 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+4:vgprG2LA+4+3] offset:16 // lwoA_0_0_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 0 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+8:vgprG2LA+8+3] offset:32 // lwoA_0_16_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 32 sync LDS0
+ds_store_b128 v[vgprLocalWriteAddrA+0], v[vgprG2LA+12:vgprG2LA+12+3] offset:48 // lwoA_0_16_0_0 = (0*LSCA)*(MT0I+PAD) + (0*LSPA) = 32 sync LDS0
+/* sched write - iter 1 writesPerItem=1 */
+s_waitcnt vmcnt(1)                                 // wait for global read before writing to local
+ds_store_b128 v[vgprLocalWriteAddrB+0], v[vgprG2LB+0:vgprG2LB+0+3] offset:0 // lwoB_0_0_0_0 = (0*LSCB)*(MT1J+PAD) + (0*LSPB) = 0 sync LDS0
+/* sched write - iter 1 writesPerItem=1 */
+s_waitcnt vmcnt(0)                                 // wait for global read before writing to local
+ds_store_b128 v[vgprLocalWriteAddrB+0], v[vgprG2LB+4:vgprG2LB+4+3] offset:2176 // lwoB_0_0_1_0 = (0*LSCB)*(MT1J+PAD) + (1*LSPB) = 2176 sync LDS0
+
+/* local write swap offsets a */
+
+/* local write swap offsets b */
+
+/* local read swap offsets a */
+
+/* local read swap offsets b */
+
+/* local read init pointers a */
+
+/* localReadInitPointers */
+
+/* local read init pointers b */
+
+/* localReadInitPointers */
+v_wmma_f32_16x16x16_bf16 v[vgprValuC+8:vgprValuC+8+7], v[vgprValuB_X0_I0+0+0+0:vgprValuB_X0_I0+0+0+0+7], v[vgprValuA_X0_I0+8+0+0:vgprValuA_X0_I0+8+0+0+7], v[vgprValuC+8:vgprValuC+8+7] // left value = v[8+0:15+0]
+/* numPrefetchIter=0 */
+/* dataAtIterA=1 numReadsIterA=2 skipReadsIterA=0 readsPerIterA=4 */
+/* dataAtIterB=1 numReadsIterB=2 skipReadsIterB=0 readsPerIterB=2 */
+label_toPGR1:
 
 /******************************************/
 /* Ord. NoLoadLoop - Begin                */
@@ -2010,9 +2175,9 @@ v_wmma_f32_16x16x16_bf16 v[vgprValuC+8:vgprValuC+8+7], v[vgprValuB_X0_I0+0+0+0:v
 label_toPGR1end_OrdNLL:
 label_PrefetchGlobalLastIterEnd:
 
-/* Tail: add ValuA/B vgpr buffer [34...59) to pool */
+/* Tail: add ValuA/B vgpr buffer [26...51) to pool */
 
-/* Tail: add address/G2L vgpr [59...84) to pool */
+/* Tail: add address/G2L vgpr [51...76) to pool */
 label_Summation_End_8:
 .set sgprLoopCounterL, UNDEF
 .set sgprOrigLoopCounter, UNDEF
@@ -2168,144 +2333,144 @@ s_waitcnt lgkmcnt(0)                               // extra navi wait
 s_barrier
 label_localSplitULocalWriteAndRead:
 /* computeStoreVgprs */
-v_lshrrev_b32 v40, 5, v[vgprSerial]                // 40 = Serial / 32
-v_lshrrev_b32 v41, 0, v40                          // 41 = 40 / 1
-v_and_b32 v41, 0, v41                              // v41 = v41 % 1
-v_mul_lo_u32 v41, 0x10, v41                        // wave coordination offset 1
-v_and_b32 v35, 31, v[vgprSerial]                   // v35 = v[vgprSerial] % 32
-v_lshrrev_b32 v35, 4, v35                          // 35 = 35 / 16
+v_lshrrev_b32 v32, 5, v[vgprSerial]                // 32 = Serial / 32
+v_lshrrev_b32 v33, 0, v32                          // 33 = 32 / 1
+v_and_b32 v33, 0, v33                              // v33 = v33 % 1
+v_mul_lo_u32 v33, 0x10, v33                        // wave coordination offset 1
+v_and_b32 v27, 31, v[vgprSerial]                   // v27 = v[vgprSerial] % 32
+v_lshrrev_b32 v27, 4, v27                          // 27 = 27 / 16
                                                    // thread0 * continuous_output (multiplier is 1, do nothing)
-v_add_lshl_u32 v39, v41, v35, 0                    // coordination 1 = vwB *(wave_id1 + tid1)
-v_mul_lo_u32 v36, v39, s[sgprStrideC1J]            //  offset 1
-v_mul_lo_u32 v37, v39, s[sgprStrideD1J]            //  offset 1
-v_and_b32 v34, 0, v40                              // v34 = v40 % 1
-v_mul_lo_u32 v34, 0x10, v34                        // wave coordination offset 0
-v_and_b32 v41, 15, v[vgprSerial]                   // v41 = v[vgprSerial] % 16
-v_add_lshl_u32 v38, v41, v34, 0                    // coordination 0 = vwA * (wave_id0 + tid0)
+v_add_lshl_u32 v31, v33, v27, 0                    // coordination 1 = vwB *(wave_id1 + tid1)
+v_mul_lo_u32 v28, v31, s[sgprStrideC1J]            //  offset 1
+v_mul_lo_u32 v29, v31, s[sgprStrideD1J]            //  offset 1
+v_and_b32 v26, 0, v32                              // v26 = v32 % 1
+v_mul_lo_u32 v26, 0x10, v26                        // wave coordination offset 0
+v_and_b32 v33, 15, v[vgprSerial]                   // v33 = v[vgprSerial] % 16
+v_add_lshl_u32 v30, v33, v26, 0                    // coordination 0 = vwA * (wave_id0 + tid0)
 s_mul_i32 s8, 32, s[sgprWorkGroup0]                // wgp0 * MT0
-v_add_nc_u32 v34, s8, v38                          // coord 0 = (tid0/MI_m)*4 + waveG0*MIB_m + MT0*SG0
+v_add_nc_u32 v26, s8, v30                          // coord 0 = (tid0/MI_m)*4 + waveG0*MIB_m + MT0*SG0
 s_mul_i32 s8, 16, s[sgprWorkGroup1]                // wgp1 * MT1
-v_add_nc_u32 v35, s8, v39                          // coord 1 = (tid0%MI_m) + waveG1*MIB_n + MT1*SG1
-.set vgprLsuReduction, 40
+v_add_nc_u32 v27, s8, v31                          // coord 1 = (tid0%MI_m) + waveG1*MIB_n + MT1*SG1
+.set vgprLsuReduction, 32
 /* Size of vgprLsuReduction is 4 */
-v_lshrrev_b32 v45, 5, v[vgprSerial]                // 45 = Serial / 32
-v_lshrrev_b32 v44, 0, v45                          // Get LSU wave ID
-v_and_b32 v45, 0x0, v45                            // Get wave ID
+v_lshrrev_b32 v37, 5, v[vgprSerial]                // 37 = Serial / 32
+v_lshrrev_b32 v36, 0, v37                          // Get LSU wave ID
+v_and_b32 v37, 0x0, v37                            // Get wave ID
 
 /* LocalSplitU: local write 1/1 */
 label_localSplitULocalWriteAndRead_1:
 s_mov_b32 s8, 0x800                                // dataPerWave (2048)
-v_and_b32 v49, 0x1f, v[vgprSerial]                 // initial addr
-v_mul_lo_u32 v46, s8, v45                          // tmp = waveId * dataPerWave
-v_lshl_add_u32 v49, v49, 2, v46                    // addr = initial addr + tmp
+v_and_b32 v41, 0x1f, v[vgprSerial]                 // initial addr
+v_mul_lo_u32 v38, s8, v37                          // tmp = waveId * dataPerWave
+v_lshl_add_u32 v41, v41, 2, v38                    // addr = initial addr + tmp
                                                    // ldsStride = waveNum * dataPerWave (2048) (dup assign opt.)
-v_mul_lo_u32 v46, s8, v44                          // tmp = (waveNum * dataPerWave) * lsu_id
-v_add_nc_u32 v49, v46, v49                         // addr += tmp
-v_mov_b32 v48, v[vgprValuC+0]                      // copy acc[0] to vreg[48], LSU0 will process
+v_mul_lo_u32 v38, s8, v36                          // tmp = (waveNum * dataPerWave) * lsu_id
+v_add_nc_u32 v41, v38, v41                         // addr += tmp
+v_mov_b32 v40, v[vgprValuC+0]                      // copy acc[0] to vreg[40], LSU0 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:0                     // arch[0]
-v_mov_b32 v48, v[vgprValuC+8]                      // copy acc[8] to vreg[48], LSU0 will process
+ds_store_b32 v41, v40 offset:0                     // arch[0]
+v_mov_b32 v40, v[vgprValuC+8]                      // copy acc[8] to vreg[40], LSU0 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:128                   // arch[1]
-v_mov_b32 v48, v[vgprValuC+4]                      // copy acc[4] to vreg[48], LSU0 will process
+ds_store_b32 v41, v40 offset:128                   // arch[1]
+v_mov_b32 v40, v[vgprValuC+4]                      // copy acc[4] to vreg[40], LSU0 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:256                   // arch[2]
-v_mov_b32 v48, v[vgprValuC+12]                     // copy acc[12] to vreg[48], LSU0 will process
+ds_store_b32 v41, v40 offset:256                   // arch[2]
+v_mov_b32 v40, v[vgprValuC+12]                     // copy acc[12] to vreg[40], LSU0 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:384                   // arch[3]
-v_mov_b32 v48, v[vgprValuC+1]                      // copy acc[1] to vreg[48], LSU1 will process
+ds_store_b32 v41, v40 offset:384                   // arch[3]
+v_mov_b32 v40, v[vgprValuC+1]                      // copy acc[1] to vreg[40], LSU1 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:512                   // arch[4]
-v_mov_b32 v48, v[vgprValuC+9]                      // copy acc[9] to vreg[48], LSU1 will process
+ds_store_b32 v41, v40 offset:512                   // arch[4]
+v_mov_b32 v40, v[vgprValuC+9]                      // copy acc[9] to vreg[40], LSU1 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:640                   // arch[5]
-v_mov_b32 v48, v[vgprValuC+5]                      // copy acc[5] to vreg[48], LSU1 will process
+ds_store_b32 v41, v40 offset:640                   // arch[5]
+v_mov_b32 v40, v[vgprValuC+5]                      // copy acc[5] to vreg[40], LSU1 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:768                   // arch[6]
-v_mov_b32 v48, v[vgprValuC+13]                     // copy acc[13] to vreg[48], LSU1 will process
+ds_store_b32 v41, v40 offset:768                   // arch[6]
+v_mov_b32 v40, v[vgprValuC+13]                     // copy acc[13] to vreg[40], LSU1 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:896                   // arch[7]
-v_mov_b32 v48, v[vgprValuC+2]                      // copy acc[2] to vreg[48], LSU2 will process
+ds_store_b32 v41, v40 offset:896                   // arch[7]
+v_mov_b32 v40, v[vgprValuC+2]                      // copy acc[2] to vreg[40], LSU2 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1024                  // arch[8]
-v_mov_b32 v48, v[vgprValuC+10]                     // copy acc[10] to vreg[48], LSU2 will process
+ds_store_b32 v41, v40 offset:1024                  // arch[8]
+v_mov_b32 v40, v[vgprValuC+10]                     // copy acc[10] to vreg[40], LSU2 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1152                  // arch[9]
-v_mov_b32 v48, v[vgprValuC+6]                      // copy acc[6] to vreg[48], LSU2 will process
+ds_store_b32 v41, v40 offset:1152                  // arch[9]
+v_mov_b32 v40, v[vgprValuC+6]                      // copy acc[6] to vreg[40], LSU2 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1280                  // arch[10]
-v_mov_b32 v48, v[vgprValuC+14]                     // copy acc[14] to vreg[48], LSU2 will process
+ds_store_b32 v41, v40 offset:1280                  // arch[10]
+v_mov_b32 v40, v[vgprValuC+14]                     // copy acc[14] to vreg[40], LSU2 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1408                  // arch[11]
-v_mov_b32 v48, v[vgprValuC+3]                      // copy acc[3] to vreg[48], LSU3 will process
+ds_store_b32 v41, v40 offset:1408                  // arch[11]
+v_mov_b32 v40, v[vgprValuC+3]                      // copy acc[3] to vreg[40], LSU3 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1536                  // arch[12]
-v_mov_b32 v48, v[vgprValuC+11]                     // copy acc[11] to vreg[48], LSU3 will process
+ds_store_b32 v41, v40 offset:1536                  // arch[12]
+v_mov_b32 v40, v[vgprValuC+11]                     // copy acc[11] to vreg[40], LSU3 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1664                  // arch[13]
-v_mov_b32 v48, v[vgprValuC+7]                      // copy acc[7] to vreg[48], LSU3 will process
+ds_store_b32 v41, v40 offset:1664                  // arch[13]
+v_mov_b32 v40, v[vgprValuC+7]                      // copy acc[7] to vreg[40], LSU3 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1792                  // arch[14]
-v_mov_b32 v48, v[vgprValuC+15]                     // copy acc[15] to vreg[48], LSU3 will process
+ds_store_b32 v41, v40 offset:1792                  // arch[14]
+v_mov_b32 v40, v[vgprValuC+15]                     // copy acc[15] to vreg[40], LSU3 will process
 s_nop 1                                            // 2 wait states required before reading vgpr
-ds_store_b32 v49, v48 offset:1920                  // arch[15]
+ds_store_b32 v41, v40 offset:1920                  // arch[15]
 
 /* LocalSplitU: local read 1/1 */
-v_and_b32 v49, 0x1f, v[vgprSerial]                 // initial addr
+v_and_b32 v41, 0x1f, v[vgprSerial]                 // initial addr
                                                    // wave offset (2048) (dup assign opt.)
-v_mul_lo_u32 v46, s8, v45                          // wave offset = wave_id * wave offset
-v_lshl_add_u32 v49, v49, 2, v46                    // addr = initial addr + wave offset
+v_mul_lo_u32 v38, s8, v37                          // wave offset = wave_id * wave offset
+v_lshl_add_u32 v41, v41, 2, v38                    // addr = initial addr + wave offset
 s_mov_b32 s8, 0x200                                // LSU Process Offset 512
-v_mul_lo_u32 v46, s8, v44                          // lsu offset = lsu_id * LSU Process Offset
-v_add_nc_u32 v49, v49, v46                         // addr += lsu offset
+v_mul_lo_u32 v38, s8, v36                          // lsu offset = lsu_id * LSU Process Offset
+v_add_nc_u32 v41, v41, v38                         // addr += lsu offset
 s_waitcnt lgkmcnt(0)                               // wait for all writes
 s_waitcnt lgkmcnt(0)                               // extra navi wait
 s_barrier                                          // post-lsu local write
 label_localSplitULocalRead_1:
-ds_load_b32 v[vgprLsuReduction+0], v49 offset:0    // r=0 i=0, from acc[0]
-ds_load_b32 v52, v49 offset:2048                   // r=1 i=0, from acc[0]
-ds_load_b32 v56, v49 offset:4096                   // r=2 i=0, from acc[0]
-ds_load_b32 v60, v49 offset:6144                   // r=3 i=0, from acc[0]
-ds_load_b32 v[vgprLsuReduction+1], v49 offset:128  // r=0 i=1, from acc[8]
-ds_load_b32 v53, v49 offset:2176                   // r=1 i=1, from acc[8]
-ds_load_b32 v57, v49 offset:4224                   // r=2 i=1, from acc[8]
-ds_load_b32 v61, v49 offset:6272                   // r=3 i=1, from acc[8]
-ds_load_b32 v[vgprLsuReduction+2], v49 offset:256  // r=0 i=2, from acc[4]
-ds_load_b32 v54, v49 offset:2304                   // r=1 i=2, from acc[4]
-ds_load_b32 v58, v49 offset:4352                   // r=2 i=2, from acc[4]
-ds_load_b32 v62, v49 offset:6400                   // r=3 i=2, from acc[4]
-ds_load_b32 v[vgprLsuReduction+3], v49 offset:384  // r=0 i=3, from acc[12]
-ds_load_b32 v55, v49 offset:2432                   // r=1 i=3, from acc[12]
-ds_load_b32 v59, v49 offset:4480                   // r=2 i=3, from acc[12]
-ds_load_b32 v63, v49 offset:6528                   // r=3 i=3, from acc[12]
+ds_load_b32 v[vgprLsuReduction+0], v41 offset:0    // r=0 i=0, from acc[0]
+ds_load_b32 v44, v41 offset:2048                   // r=1 i=0, from acc[0]
+ds_load_b32 v48, v41 offset:4096                   // r=2 i=0, from acc[0]
+ds_load_b32 v52, v41 offset:6144                   // r=3 i=0, from acc[0]
+ds_load_b32 v[vgprLsuReduction+1], v41 offset:128  // r=0 i=1, from acc[8]
+ds_load_b32 v45, v41 offset:2176                   // r=1 i=1, from acc[8]
+ds_load_b32 v49, v41 offset:4224                   // r=2 i=1, from acc[8]
+ds_load_b32 v53, v41 offset:6272                   // r=3 i=1, from acc[8]
+ds_load_b32 v[vgprLsuReduction+2], v41 offset:256  // r=0 i=2, from acc[4]
+ds_load_b32 v46, v41 offset:2304                   // r=1 i=2, from acc[4]
+ds_load_b32 v50, v41 offset:4352                   // r=2 i=2, from acc[4]
+ds_load_b32 v54, v41 offset:6400                   // r=3 i=2, from acc[4]
+ds_load_b32 v[vgprLsuReduction+3], v41 offset:384  // r=0 i=3, from acc[12]
+ds_load_b32 v47, v41 offset:2432                   // r=1 i=3, from acc[12]
+ds_load_b32 v51, v41 offset:4480                   // r=2 i=3, from acc[12]
+ds_load_b32 v55, v41 offset:6528                   // r=3 i=3, from acc[12]
 s_waitcnt lgkmcnt(12)                              // wait count is (16-4)
+v_add_f32 v[vgprLsuReduction+0], v44, v[vgprLsuReduction+0]
+v_add_f32 v[vgprLsuReduction+0], v48, v[vgprLsuReduction+0]
 v_add_f32 v[vgprLsuReduction+0], v52, v[vgprLsuReduction+0]
-v_add_f32 v[vgprLsuReduction+0], v56, v[vgprLsuReduction+0]
-v_add_f32 v[vgprLsuReduction+0], v60, v[vgprLsuReduction+0]
 s_waitcnt lgkmcnt(8)                               // wait count is (16-8)
+v_add_f32 v[vgprLsuReduction+1], v45, v[vgprLsuReduction+1]
+v_add_f32 v[vgprLsuReduction+1], v49, v[vgprLsuReduction+1]
 v_add_f32 v[vgprLsuReduction+1], v53, v[vgprLsuReduction+1]
-v_add_f32 v[vgprLsuReduction+1], v57, v[vgprLsuReduction+1]
-v_add_f32 v[vgprLsuReduction+1], v61, v[vgprLsuReduction+1]
 s_waitcnt lgkmcnt(4)                               // wait count is (16-12)
+v_add_f32 v[vgprLsuReduction+2], v46, v[vgprLsuReduction+2]
+v_add_f32 v[vgprLsuReduction+2], v50, v[vgprLsuReduction+2]
 v_add_f32 v[vgprLsuReduction+2], v54, v[vgprLsuReduction+2]
-v_add_f32 v[vgprLsuReduction+2], v58, v[vgprLsuReduction+2]
-v_add_f32 v[vgprLsuReduction+2], v62, v[vgprLsuReduction+2]
 s_waitcnt lgkmcnt(0)                               // wait count is (16-16)
+v_add_f32 v[vgprLsuReduction+3], v47, v[vgprLsuReduction+3]
+v_add_f32 v[vgprLsuReduction+3], v51, v[vgprLsuReduction+3]
 v_add_f32 v[vgprLsuReduction+3], v55, v[vgprLsuReduction+3]
-v_add_f32 v[vgprLsuReduction+3], v59, v[vgprLsuReduction+3]
-v_add_f32 v[vgprLsuReduction+3], v63, v[vgprLsuReduction+3]
-.set vgprValuC, 40
+.set vgprValuC, 32
 
 /* LocalSplitU: global write indices */
-v_lshrrev_b32 v44, 5, v[vgprSerial]                // 44 = Serial / 32
-v_lshrrev_b32 v44, 0, v44                          // 44 = 44 / 1
+v_lshrrev_b32 v36, 5, v[vgprSerial]                // 36 = Serial / 32
+v_lshrrev_b32 v36, 0, v36                          // 36 = 36 / 1
 /* valid offset coord0 is zero. */
 s_mov_b32 s8, 0x2                                  // a valid offset
-v_mul_lo_u32 v46, v44, s8                          // wave LSU offset
-v_add_nc_u32 v35, v46, v35                         // coord1 += LSU offset1
-v_add_nc_u32 v39, v46, v39                         // coord1InMT += LSU offset1
-v_mul_lo_u32 v36, v39, s[sgprStrideC1J]            //  offset 1
-v_mul_lo_u32 v37, v39, s[sgprStrideD1J]            //  offset 1
+v_mul_lo_u32 v38, v36, s8                          // wave LSU offset
+v_add_nc_u32 v27, v38, v27                         // coord1 += LSU offset1
+v_add_nc_u32 v31, v38, v31                         // coord1InMT += LSU offset1
+v_mul_lo_u32 v28, v31, s[sgprStrideC1J]            //  offset 1
+v_mul_lo_u32 v29, v31, s[sgprStrideD1J]            //  offset 1
 
 /* LocalSplitU: global write */
 
@@ -2336,7 +2501,7 @@ s_cmpk_gt_u32 s68, 0                               // rem > 0
 s_cbranch_scc1 label_GW_B0_FD0_VW1_MB_Then_1       // jump if edges required
 label_GW_B0_FD0_VW1_MB_NonEdge_1:
 
-/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=44 */
+/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=66 */
 /* optSingleColVgpr=1 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Mask optSrdIncForRow=1 factorDim=0 */
 
 /******************************************/
@@ -2349,25 +2514,25 @@ label_GW_B0_FD0_VW1_MB_NonEdge_1:
 /* (d1,vc1,d0,vc0)=(0,0,1,0) */
 /* (d1,vc1,d0,vc0)=(4,0,0,0) */
 /* (d1,vc1,d0,vc0)=(4,0,1,0) */
-v_add_lshl_u32 v38, v37, v34, 2                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=34, coord0Vgpr=34 (multiple bpe)
+v_add_lshl_u32 v30, v29, v26, 2                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=26, coord0Vgpr=26 (multiple bpe)
 
 /* rC *= alpha batchElements=[(0, 0, 0, 0), (0, 1, 0, 0), (4, 0, 0, 0), (4, 1, 0, 0)] */
 
 /* apply mask, calc new C and issue writes */
-buffer_store_b32 v40, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-buffer_store_b32 v41, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:64 // store D
+buffer_store_b32 v32, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b32 v33, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:64 // store D
 s_mul_i32 s8, s[sgprStrideD1J], 32                 // scale StrideD *= numRows(8) * bpe
 s_add_u32 s[sgprSrdD+0], s[sgprSrdD+0], s8         // incToNextRow(8): gra SRD += inc(lower)
 s_addc_u32 s[sgprSrdD+1], s[sgprSrdD+1], 0         // incToNextRow(8): gra SRD += inc(upper)
-buffer_store_b32 v42, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-buffer_store_b32 v43, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:64 // store D
+buffer_store_b32 v34, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b32 v35, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:64 // store D
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_branch label_GW_End                              // jump to end
 label_GW_B0_FD0_VW1_MB_NonEdgeEnd_1:
 label_GW_B0_FD0_VW1_MB_Else_1:
 label_GW_B0_FD0_VW1_MB_Then_1:
 
-/* edge=1, allocate 3 sgpr. perBatchTmpS=2 perBatchMaskS=1 perElementMaskS=0 elementsPerBatch=22 */
+/* edge=1, allocate 3 sgpr. perBatchTmpS=2 perBatchMaskS=1 perElementMaskS=0 elementsPerBatch=34 */
 /* optSingleColVgpr=0 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Edge_Mask optSrdIncForRow=0 factorDim=0 */
 
 /******************************************/
@@ -2376,48 +2541,48 @@ label_GW_B0_FD0_VW1_MB_Then_1:
 /******************************************/
 
 /* calc coords, apply mask, and issue loads (if necessary) */
-v_mov_b32 v46, BufferOOB
+v_mov_b32 v38, BufferOOB
 /* (d1,vc1,d0,vc0)=(0,0,0,0) */
-v_cmp_lt_u32 s68, v34, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_cmp_lt_u32 s68, v26, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v38, v37, v34, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v38, v46, v38, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v30, v29, v26, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v30, v38, v30, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(0,0,1,0) */
-v_add_co_u32 v44, vcc_lo, v34, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
-v_cmp_lt_u32 s68, v44, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_co_u32 v36, vcc_lo, v26, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
+v_cmp_lt_u32 s68, v36, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v39, v37, v44, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v39, v46, v39, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v31, v29, v36, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v31, v38, v31, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(4,0,0,0) */
-v_add_co_u32 v35, vcc_lo, v35, 8                   // coord1.1: coord1Vgpr += d1*sg1*VW + vc1
+v_add_co_u32 v27, vcc_lo, v27, 8                   // coord1.1: coord1Vgpr += d1*sg1*VW + vc1
 
 /* Fix for UseInitialStridesCD, emitAddressSetupCode */
 s_mul_i32 s68, s[sgprStrideC1J], 8                 // scale stride
-v_add_nc_i32 v36, v36, s68                         // ROWINC- Move cinRowPtr to next row
+v_add_nc_i32 v28, v28, s68                         // ROWINC- Move cinRowPtr to next row
 s_mul_i32 s68, s[sgprStrideD1J], 8                 // scale stride
-v_add_nc_i32 v37, v37, s68                         // Move coutRowPtrD to next row
-v_cmp_lt_u32 s68, v34, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_nc_i32 v29, v29, s68                         // Move coutRowPtrD to next row
+v_cmp_lt_u32 s68, v26, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v51, v37, v34, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v51, v46, v51, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v43, v29, v26, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v43, v38, v43, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(4,0,1,0) */
-v_add_co_u32 v44, vcc_lo, v34, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
-v_cmp_lt_u32 s68, v44, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_co_u32 v36, vcc_lo, v26, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
+v_cmp_lt_u32 s68, v36, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v52, v37, v44, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v52, v46, v52, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v44, v29, v36, 2                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v44, v38, v44, s70                   // LDD clip if OOB. offset
 
 /* rC *= alpha batchElements=[(0, 0, 0, 0), (0, 1, 0, 0), (4, 0, 0, 0), (4, 1, 0, 0)] */
 
 /* apply mask, calc new C and issue writes */
-buffer_store_b32 v40, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-buffer_store_b32 v41, v39, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-buffer_store_b32 v42, v51, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-buffer_store_b32 v43, v52, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b32 v32, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b32 v33, v31, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b32 v34, v43, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b32 v35, v44, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_branch label_GW_End                              // jump to end
 label_GW_End:
@@ -2456,17 +2621,17 @@ s_barrier                                          // wait for all workgroups be
 v_readfirstlane_b32 s70, v[vgprSerial]             // Wave 0 updates flags
 s_cmp_eq_u32 s70, 0                                // Check for wave 0
 s_cbranch_scc0 label_SK_SkipFlagReset              // Skip flag reset
-v_mov_b32 v38, s70                                 // move flag value to vgpr
-v_mov_b32 v39, 0                                   // zero vaddr offset
+v_mov_b32 v30, s70                                 // move flag value to vgpr
+v_mov_b32 v31, 0                                   // zero vaddr offset
 s_mov_b64 s[72:73], s[sgprAddressFlags:sgprAddressFlags+1]
 s_mov_b32 s74, BufferOOB
 s_mov_b32 s75, Srd127_96
-buffer_store_b32 v38, v39, s[72:75], s68 offen offset:0 glc dlc // reset flag
+buffer_store_b32 v30, v31, s[72:75], s68 offen offset:0 glc dlc // reset flag
 s_waitcnt_vscnt null 0                             // wait for data store
 label_SK_SkipFlagReset:
 label_Fixup_E0:
 
-/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=20 */
+/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=32 */
 s_mov_b64 s[sgprSrdWS:sgprSrdWS+1], s[sgprAddressWS:sgprAddressWS+1]
 s_mov_b32 s[sgprSrdWS+2], BufferOOB
 s_mov_b32 s[sgprSrdWS+3], Srd127_96
@@ -2483,32 +2648,32 @@ s_addc_u32 s[sgprSrdWS+1], s[sgprSrdWS+1], s53     // add hi (offset high word +
 /******************************************/
 
 /* calc coords, apply mask, and issue loads (if necessary) */
-v_lshlrev_b32 v39, 2, v[vgprSerial]                // v39 = v[vgprSerial] * 4
+v_lshlrev_b32 v31, 2, v[vgprSerial]                // v31 = v[vgprSerial] * 4
 s_mov_b32 s62, 0                                   // Init sgpr offset
-buffer_load_b32 v51, v39, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
+buffer_load_b32 v43, v31, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
 s_add_u32 s62, s62, 512                            // Inc sgpr offset
-buffer_load_b32 v52, v39, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
+buffer_load_b32 v44, v31, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
 s_add_u32 s62, s62, 512                            // Inc sgpr offset
-buffer_load_b32 v53, v39, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
+buffer_load_b32 v45, v31, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
 s_add_u32 s62, s62, 512                            // Inc sgpr offset
-buffer_load_b32 v54, v39, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
+buffer_load_b32 v46, v31, s[sgprSrdWS:sgprSrdWS+3], s62 offen offset:0 glc slc // load WS
 
 /* apply mask, calc new C and issue writes */
-v_mov_b32 v48, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
-v_mov_b32 v49, 0x7fff0000                          // fp32 Nan
-v_mov_b32 v50, 0x7fff                              // rounding bias for bfloat16
+v_mov_b32 v40, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
+v_mov_b32 v41, 0x7fff0000                          // fp32 Nan
+v_mov_b32 v42, 0x7fff                              // rounding bias for bfloat16
 
 s_waitcnt vmcnt(3)                                 // wait C (interleaved) 3 = 4 - 0 - 1
-v_add_f32 v[vgprValuC+0], v[vgprValuC+0], v51      // accum partials
+v_add_f32 v[vgprValuC+0], v[vgprValuC+0], v43      // accum partials
 
 s_waitcnt vmcnt(2)                                 // wait C (interleaved) 2 = 4 - 1 - 1
-v_add_f32 v[vgprValuC+1], v[vgprValuC+1], v52      // accum partials
+v_add_f32 v[vgprValuC+1], v[vgprValuC+1], v44      // accum partials
 
 s_waitcnt vmcnt(1)                                 // wait C (interleaved) 1 = 4 - 2 - 1
-v_add_f32 v[vgprValuC+2], v[vgprValuC+2], v53      // accum partials
+v_add_f32 v[vgprValuC+2], v[vgprValuC+2], v45      // accum partials
 
 s_waitcnt vmcnt(0)                                 // wait C (interleaved) 0 = 4 - 3 - 1
-v_add_f32 v[vgprValuC+3], v[vgprValuC+3], v54      // accum partials
+v_add_f32 v[vgprValuC+3], v[vgprValuC+3], v46      // accum partials
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_mul_i32 s53, s[sgprskTiles], s[sgprItersPerTile]
 s_mul_i32 s61, s[sgprSKItersPerWG], s[sgprskGrid]
@@ -2517,81 +2682,81 @@ s_bitcmp1_b32 s[sgprMagicShiftItersPerTile], 29    // USO on? (bit 29 of MagicSh
 s_cbranch_scc0 label_SK_PeerGlobal                 // USO off -> historical global mapping
 s_cmp_eq_u32 s[sgprskTiles], 0                     // skTiles == 0?
 s_cbranch_scc1 label_SK_PeerNoTiles                // global peer size
-v_cvt_f32_u32 v38, s[sgprskTiles]                  // skGrid % skTiles
-v_rcp_iflag_f32 v38, v38                           // skGrid % skTiles
-v_mov_b32 v39, 0x4f7ffffe                          // 2^32 - 512
-v_mul_f32 v38, v39, v38                            // 2^32 / divisor
-v_cvt_u32_f32 v38, v38                             // skGrid % skTiles
-v_mul_lo_u32 v39, v38, s[sgprskTiles]              // refine 2^32 / divisor
-v_sub_nc_u32 v39, 0, v39                           // refine 2^32 / divisor
-v_mul_hi_u32 v39, v38, v39                         // refine 2^32 / divisor
-v_add_nc_u32 v38, v38, v39                         // refine 2^32 / divisor
-v_mul_hi_u32 v38, s[sgprskGrid], v38               // skGrid % skTiles
-v_mul_lo_u32 v39, v38, s[sgprskTiles]              // skGrid % skTiles
-v_sub_nc_u32 v39, s[sgprskGrid], v39               // skGrid % skTiles
-v_cmp_ge_u32 vcc_lo, v39, s[sgprskTiles]           // remainder >= divisor?
+v_cvt_f32_u32 v30, s[sgprskTiles]                  // skGrid % skTiles
+v_rcp_iflag_f32 v30, v30                           // skGrid % skTiles
+v_mov_b32 v31, 0x4f7ffffe                          // 2^32 - 512
+v_mul_f32 v30, v31, v30                            // 2^32 / divisor
+v_cvt_u32_f32 v30, v30                             // skGrid % skTiles
+v_mul_lo_u32 v31, v30, s[sgprskTiles]              // refine 2^32 / divisor
+v_sub_nc_u32 v31, 0, v31                           // refine 2^32 / divisor
+v_mul_hi_u32 v31, v30, v31                         // refine 2^32 / divisor
+v_add_nc_u32 v30, v30, v31                         // refine 2^32 / divisor
+v_mul_hi_u32 v30, s[sgprskGrid], v30               // skGrid % skTiles
+v_mul_lo_u32 v31, v30, s[sgprskTiles]              // skGrid % skTiles
+v_sub_nc_u32 v31, s[sgprskGrid], v31               // skGrid % skTiles
+v_cmp_ge_u32 vcc_lo, v31, s[sgprskTiles]           // remainder >= divisor?
 s_mov_b32 exec_lo, vcc_lo                          // remainder >= divisor?
-v_add_nc_u32 v38, 1, v38                           // quotient + 1
-v_sub_nc_u32 v39, v39, s[sgprskTiles]              // remainder - divisor
+v_add_nc_u32 v30, 1, v30                           // quotient + 1
+v_sub_nc_u32 v31, v31, s[sgprskTiles]              // remainder - divisor
 s_mov_b32 exec_lo, -1                              // Reset exec
-v_cmp_ge_u32 vcc_lo, v39, s[sgprskTiles]           // remainder >= divisor?
+v_cmp_ge_u32 vcc_lo, v31, s[sgprskTiles]           // remainder >= divisor?
 s_mov_b32 exec_lo, vcc_lo                          // remainder >= divisor?
-v_add_nc_u32 v38, 1, v38                           // quotient + 1
-v_sub_nc_u32 v39, v39, s[sgprskTiles]              // remainder - divisor
+v_add_nc_u32 v30, 1, v30                           // quotient + 1
+v_sub_nc_u32 v31, v31, s[sgprskTiles]              // remainder - divisor
 s_mov_b32 exec_lo, -1                              // Reset exec
-v_readfirstlane_b32 s61, v38                       // quotient
-v_readfirstlane_b32 s61, v39                       // remainder
+v_readfirstlane_b32 s61, v30                       // quotient
+v_readfirstlane_b32 s61, v31                       // remainder
 s_cmp_eq_u32 s61, 0                                // skGrid % skTiles == 0?
 s_cbranch_scc0 label_SK_PeerGlobal                 // ragged -> global peer
 label_SK_PeerPerTile:
-v_cvt_f32_u32 v38, s[sgprskTiles]                  // F = skGrid / skTiles
-v_rcp_iflag_f32 v38, v38                           // F = skGrid / skTiles
-v_mov_b32 v39, 0x4f7ffffe                          // 2^32 - 512
-v_mul_f32 v38, v39, v38                            // 2^32 / divisor
-v_cvt_u32_f32 v38, v38                             // F = skGrid / skTiles
-v_mul_lo_u32 v39, v38, s[sgprskTiles]              // refine 2^32 / divisor
-v_sub_nc_u32 v39, 0, v39                           // refine 2^32 / divisor
-v_mul_hi_u32 v39, v38, v39                         // refine 2^32 / divisor
-v_add_nc_u32 v38, v38, v39                         // refine 2^32 / divisor
-v_mul_hi_u32 v38, s[sgprskGrid], v38               // F = skGrid / skTiles
-v_mul_lo_u32 v39, v38, s[sgprskTiles]              // F = skGrid / skTiles
-v_sub_nc_u32 v39, s[sgprskGrid], v39               // F = skGrid / skTiles
-v_cmp_ge_u32 vcc_lo, v39, s[sgprskTiles]           // remainder >= divisor?
+v_cvt_f32_u32 v30, s[sgprskTiles]                  // F = skGrid / skTiles
+v_rcp_iflag_f32 v30, v30                           // F = skGrid / skTiles
+v_mov_b32 v31, 0x4f7ffffe                          // 2^32 - 512
+v_mul_f32 v30, v31, v30                            // 2^32 / divisor
+v_cvt_u32_f32 v30, v30                             // F = skGrid / skTiles
+v_mul_lo_u32 v31, v30, s[sgprskTiles]              // refine 2^32 / divisor
+v_sub_nc_u32 v31, 0, v31                           // refine 2^32 / divisor
+v_mul_hi_u32 v31, v30, v31                         // refine 2^32 / divisor
+v_add_nc_u32 v30, v30, v31                         // refine 2^32 / divisor
+v_mul_hi_u32 v30, s[sgprskGrid], v30               // F = skGrid / skTiles
+v_mul_lo_u32 v31, v30, s[sgprskTiles]              // F = skGrid / skTiles
+v_sub_nc_u32 v31, s[sgprskGrid], v31               // F = skGrid / skTiles
+v_cmp_ge_u32 vcc_lo, v31, s[sgprskTiles]           // remainder >= divisor?
 s_mov_b32 exec_lo, vcc_lo                          // remainder >= divisor?
-v_add_nc_u32 v38, 1, v38                           // quotient + 1
-v_sub_nc_u32 v39, v39, s[sgprskTiles]              // remainder - divisor
+v_add_nc_u32 v30, 1, v30                           // quotient + 1
+v_sub_nc_u32 v31, v31, s[sgprskTiles]              // remainder - divisor
 s_mov_b32 exec_lo, -1                              // Reset exec
-v_cmp_ge_u32 vcc_lo, v39, s[sgprskTiles]           // remainder >= divisor?
+v_cmp_ge_u32 vcc_lo, v31, s[sgprskTiles]           // remainder >= divisor?
 s_mov_b32 exec_lo, vcc_lo                          // remainder >= divisor?
-v_add_nc_u32 v38, 1, v38                           // quotient + 1
-v_sub_nc_u32 v39, v39, s[sgprskTiles]              // remainder - divisor
+v_add_nc_u32 v30, 1, v30                           // quotient + 1
+v_sub_nc_u32 v31, v31, s[sgprskTiles]              // remainder - divisor
 s_mov_b32 exec_lo, -1                              // Reset exec
-v_readfirstlane_b32 s61, v38                       // quotient
+v_readfirstlane_b32 s61, v30                       // quotient
 s_mov_b32 s53, s61                                 // F = skGrid / skTiles
-v_cvt_f32_u32 v38, s53                             // s = cta % F
-v_rcp_iflag_f32 v38, v38                           // s = cta % F
-v_mov_b32 v39, 0x4f7ffffe                          // 2^32 - 512
-v_mul_f32 v38, v39, v38                            // 2^32 / divisor
-v_cvt_u32_f32 v38, v38                             // s = cta % F
-v_mul_lo_u32 v39, v38, s53                         // refine 2^32 / divisor
-v_sub_nc_u32 v39, 0, v39                           // refine 2^32 / divisor
-v_mul_hi_u32 v39, v38, v39                         // refine 2^32 / divisor
-v_add_nc_u32 v38, v38, v39                         // refine 2^32 / divisor
-v_mul_hi_u32 v38, s8, v38                          // s = cta % F
-v_mul_lo_u32 v39, v38, s53                         // s = cta % F
-v_sub_nc_u32 v39, s8, v39                          // s = cta % F
-v_cmp_ge_u32 vcc_lo, v39, s53                      // remainder >= divisor?
+v_cvt_f32_u32 v30, s53                             // s = cta % F
+v_rcp_iflag_f32 v30, v30                           // s = cta % F
+v_mov_b32 v31, 0x4f7ffffe                          // 2^32 - 512
+v_mul_f32 v30, v31, v30                            // 2^32 / divisor
+v_cvt_u32_f32 v30, v30                             // s = cta % F
+v_mul_lo_u32 v31, v30, s53                         // refine 2^32 / divisor
+v_sub_nc_u32 v31, 0, v31                           // refine 2^32 / divisor
+v_mul_hi_u32 v31, v30, v31                         // refine 2^32 / divisor
+v_add_nc_u32 v30, v30, v31                         // refine 2^32 / divisor
+v_mul_hi_u32 v30, s8, v30                          // s = cta % F
+v_mul_lo_u32 v31, v30, s53                         // s = cta % F
+v_sub_nc_u32 v31, s8, v31                          // s = cta % F
+v_cmp_ge_u32 vcc_lo, v31, s53                      // remainder >= divisor?
 s_mov_b32 exec_lo, vcc_lo                          // remainder >= divisor?
-v_add_nc_u32 v38, 1, v38                           // quotient + 1
-v_sub_nc_u32 v39, v39, s53                         // remainder - divisor
+v_add_nc_u32 v30, 1, v30                           // quotient + 1
+v_sub_nc_u32 v31, v31, s53                         // remainder - divisor
 s_mov_b32 exec_lo, -1                              // Reset exec
-v_cmp_ge_u32 vcc_lo, v39, s53                      // remainder >= divisor?
+v_cmp_ge_u32 vcc_lo, v31, s53                      // remainder >= divisor?
 s_mov_b32 exec_lo, vcc_lo                          // remainder >= divisor?
-v_add_nc_u32 v38, 1, v38                           // quotient + 1
-v_sub_nc_u32 v39, v39, s53                         // remainder - divisor
+v_add_nc_u32 v30, 1, v30                           // quotient + 1
+v_sub_nc_u32 v31, v31, s53                         // remainder - divisor
 s_mov_b32 exec_lo, -1                              // Reset exec
-v_readfirstlane_b32 s61, v38                       // quotient
-v_readfirstlane_b32 s61, v39                       // remainder
+v_readfirstlane_b32 s61, v30                       // quotient
+v_readfirstlane_b32 s61, v31                       // remainder
 s_mul_i32 s53, s53, s[sgprSKItersPerWG]            // F * SKItersPerWG
 s_sub_u32 s53, s[sgprItersPerTile], s53            // remI = ItersPerTile - F*W
 s_cmp_lt_u32 s61, s53                              // s < remI?
@@ -2632,7 +2797,7 @@ s_cmpk_gt_u32 s68, 0                               // rem > 0
 s_cbranch_scc1 label_GW_B0_FD0_VW1_GSU1_Then_1     // jump if edges required
 label_GW_B0_FD0_VW1_GSU1_NonEdge_1:
 
-/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=44 */
+/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=66 */
 /* optSingleColVgpr=1 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Mask optSrdIncForRow=1 factorDim=0 */
 
 /******************************************/
@@ -2645,7 +2810,7 @@ label_GW_B0_FD0_VW1_GSU1_NonEdge_1:
 /* (d1,vc1,d0,vc0)=(0,0,1,0) */
 /* (d1,vc1,d0,vc0)=(4,0,0,0) */
 /* (d1,vc1,d0,vc0)=(4,0,1,0) */
-v_add_lshl_u32 v38, v37, v34, 1                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=34, coord0Vgpr=34 (multiple bpe)
+v_add_lshl_u32 v30, v29, v26, 1                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=26, coord0Vgpr=26 (multiple bpe)
 
 /* rC *= alpha batchElements=[(0, 0, 0, 0), (0, 1, 0, 0), (4, 0, 0, 0), (4, 1, 0, 0)] */
 v_mul_f32 v[vgprValuC+0], s[sgprAlpha], v[vgprValuC+0] // *= alpha (pk)
@@ -2654,43 +2819,43 @@ v_mul_f32 v[vgprValuC+2], s[sgprAlpha], v[vgprValuC+2] // *= alpha (pk)
 v_mul_f32 v[vgprValuC+2+1], s[sgprAlpha], v[vgprValuC+2+1] // *= alpha (pk)
 
 /* apply mask, calc new C and issue writes */
-v_mov_b32 v48, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
-v_mov_b32 v49, 0x7fff0000                          // fp32 Nan
-v_mov_b32 v50, 0x7fff                              // rounding bias for bfloat16
+v_mov_b32 v40, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
+v_mov_b32 v41, 0x7fff0000                          // fp32 Nan
+v_mov_b32 v42, 0x7fff                              // rounding bias for bfloat16
 v_cmp_u_f32 s8, v[vgprValuC+0], v[vgprValuC+0]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+0], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+0], v47, v49, s8
-v_lshrrev_b32 v40, 16, v[vgprValuC+0]              // convert C to bf16
-buffer_store_b16 v40, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+0], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+0], v39, v41, s8
+v_lshrrev_b32 v32, 16, v[vgprValuC+0]              // convert C to bf16
+buffer_store_b16 v32, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 v_cmp_u_f32 s8, v[vgprValuC+1], v[vgprValuC+1]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+1], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+1], v47, v49, s8
-v_lshrrev_b32 v41, 16, v[vgprValuC+1]              // convert C to bf16
-buffer_store_b16 v41, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
+v_bfe_u32 v39, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+1], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+1], v39, v41, s8
+v_lshrrev_b32 v33, 16, v[vgprValuC+1]              // convert C to bf16
+buffer_store_b16 v33, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
 v_cmp_u_f32 s8, v[vgprValuC+2], v[vgprValuC+2]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+2], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+2], v47, v49, s8
-v_lshrrev_b32 v42, 16, v[vgprValuC+2]              // convert C to bf16
+v_bfe_u32 v39, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+2], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+2], v39, v41, s8
+v_lshrrev_b32 v34, 16, v[vgprValuC+2]              // convert C to bf16
 s_mul_i32 s8, s[sgprStrideD1J], 16                 // scale StrideD *= numRows(8) * bpe
 s_add_u32 s[sgprSrdD+0], s[sgprSrdD+0], s8         // incToNextRow(8): gra SRD += inc(lower)
 s_addc_u32 s[sgprSrdD+1], s[sgprSrdD+1], 0         // incToNextRow(8): gra SRD += inc(upper)
-buffer_store_b16 v42, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b16 v34, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 v_cmp_u_f32 s8, v[vgprValuC+3], v[vgprValuC+3]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+3], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+3], v47, v49, s8
-v_lshrrev_b32 v43, 16, v[vgprValuC+3]              // convert C to bf16
-buffer_store_b16 v43, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
+v_bfe_u32 v39, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+3], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+3], v39, v41, s8
+v_lshrrev_b32 v35, 16, v[vgprValuC+3]              // convert C to bf16
+buffer_store_b16 v35, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_branch label_GW_End_1                            // jump to end
 label_GW_B0_FD0_VW1_GSU1_NonEdgeEnd_1:
 label_GW_B0_FD0_VW1_GSU1_Else_1:
 label_GW_B0_FD0_VW1_GSU1_Then_1:
 
-/* edge=1, allocate 3 sgpr. perBatchTmpS=2 perBatchMaskS=1 perElementMaskS=0 elementsPerBatch=22 */
+/* edge=1, allocate 3 sgpr. perBatchTmpS=2 perBatchMaskS=1 perElementMaskS=0 elementsPerBatch=34 */
 /* optSingleColVgpr=0 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Edge_Mask optSrdIncForRow=0 factorDim=0 */
 
 /******************************************/
@@ -2699,40 +2864,40 @@ label_GW_B0_FD0_VW1_GSU1_Then_1:
 /******************************************/
 
 /* calc coords, apply mask, and issue loads (if necessary) */
-v_mov_b32 v46, BufferOOB
+v_mov_b32 v38, BufferOOB
 /* (d1,vc1,d0,vc0)=(0,0,0,0) */
-v_cmp_lt_u32 s68, v34, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_cmp_lt_u32 s68, v26, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v38, v37, v34, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v38, v46, v38, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v30, v29, v26, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v30, v38, v30, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(0,0,1,0) */
-v_add_co_u32 v44, vcc_lo, v34, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
-v_cmp_lt_u32 s68, v44, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_co_u32 v36, vcc_lo, v26, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
+v_cmp_lt_u32 s68, v36, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v39, v37, v44, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v39, v46, v39, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v31, v29, v36, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v31, v38, v31, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(4,0,0,0) */
-v_add_co_u32 v35, vcc_lo, v35, 8                   // coord1.1: coord1Vgpr += d1*sg1*VW + vc1
+v_add_co_u32 v27, vcc_lo, v27, 8                   // coord1.1: coord1Vgpr += d1*sg1*VW + vc1
 
 /* Fix for UseInitialStridesCD, emitAddressSetupCode */
 s_mul_i32 s68, s[sgprStrideC1J], 8                 // scale stride
-v_add_nc_i32 v36, v36, s68                         // ROWINC- Move cinRowPtr to next row
+v_add_nc_i32 v28, v28, s68                         // ROWINC- Move cinRowPtr to next row
 s_mul_i32 s68, s[sgprStrideD1J], 8                 // scale stride
-v_add_nc_i32 v37, v37, s68                         // Move coutRowPtrD to next row
-v_cmp_lt_u32 s68, v34, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_nc_i32 v29, v29, s68                         // Move coutRowPtrD to next row
+v_cmp_lt_u32 s68, v26, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v51, v37, v34, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v51, v46, v51, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v43, v29, v26, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v43, v38, v43, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(4,0,1,0) */
-v_add_co_u32 v44, vcc_lo, v34, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
-v_cmp_lt_u32 s68, v44, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_co_u32 v36, vcc_lo, v26, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
+v_cmp_lt_u32 s68, v36, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v52, v37, v44, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v52, v46, v52, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v44, v29, v36, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v44, v38, v44, s70                   // LDD clip if OOB. offset
 
 /* rC *= alpha batchElements=[(0, 0, 0, 0), (0, 1, 0, 0), (4, 0, 0, 0), (4, 1, 0, 0)] */
 v_mul_f32 v[vgprValuC+0], s[sgprAlpha], v[vgprValuC+0] // *= alpha (pk)
@@ -2741,33 +2906,33 @@ v_mul_f32 v[vgprValuC+2], s[sgprAlpha], v[vgprValuC+2] // *= alpha (pk)
 v_mul_f32 v[vgprValuC+2+1], s[sgprAlpha], v[vgprValuC+2+1] // *= alpha (pk)
 
 /* apply mask, calc new C and issue writes */
-v_mov_b32 v48, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
-v_mov_b32 v49, 0x7fff0000                          // fp32 Nan
-v_mov_b32 v50, 0x7fff                              // rounding bias for bfloat16
+v_mov_b32 v40, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
+v_mov_b32 v41, 0x7fff0000                          // fp32 Nan
+v_mov_b32 v42, 0x7fff                              // rounding bias for bfloat16
 v_cmp_u_f32 s68, v[vgprValuC+0], v[vgprValuC+0]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+0], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+0], v47, v49, s68
-v_lshrrev_b32 v40, 16, v[vgprValuC+0]              // convert C to bf16
-buffer_store_b16 v40, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+0], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+0], v39, v41, s68
+v_lshrrev_b32 v32, 16, v[vgprValuC+0]              // convert C to bf16
+buffer_store_b16 v32, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 v_cmp_u_f32 s68, v[vgprValuC+1], v[vgprValuC+1]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+1], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+1], v47, v49, s68
-v_lshrrev_b32 v41, 16, v[vgprValuC+1]              // convert C to bf16
-buffer_store_b16 v41, v39, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+1], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+1], v39, v41, s68
+v_lshrrev_b32 v33, 16, v[vgprValuC+1]              // convert C to bf16
+buffer_store_b16 v33, v31, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 v_cmp_u_f32 s68, v[vgprValuC+2], v[vgprValuC+2]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+2], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+2], v47, v49, s68
-v_lshrrev_b32 v42, 16, v[vgprValuC+2]              // convert C to bf16
-buffer_store_b16 v42, v51, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+2], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+2], v39, v41, s68
+v_lshrrev_b32 v34, 16, v[vgprValuC+2]              // convert C to bf16
+buffer_store_b16 v34, v43, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 v_cmp_u_f32 s68, v[vgprValuC+3], v[vgprValuC+3]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+3], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+3], v47, v49, s68
-v_lshrrev_b32 v43, 16, v[vgprValuC+3]              // convert C to bf16
-buffer_store_b16 v43, v52, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+3], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+3], v39, v41, s68
+v_lshrrev_b32 v35, 16, v[vgprValuC+3]              // convert C to bf16
+buffer_store_b16 v35, v44, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_branch label_GW_End_1                            // jump to end
 label_GW_B1_GSU1:
@@ -2790,7 +2955,7 @@ s_cmpk_gt_u32 s68, 0                               // rem > 0
 s_cbranch_scc1 label_GW_B1_FD0_VW1_GSU1_Then_1     // jump if edges required
 label_GW_B1_FD0_VW1_GSU1_NonEdge_1:
 
-/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=20 */
+/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=32 */
 /* optSingleColVgpr=1 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Mask optSrdIncForRow=1 factorDim=0 */
 
 /******************************************/
@@ -2800,18 +2965,18 @@ label_GW_B1_FD0_VW1_GSU1_NonEdge_1:
 
 /* calc coords, apply mask, and issue loads (if necessary) */
 /* (d1,vc1,d0,vc0)=(0,0,0,0) */
-v_add_lshl_u32 v39, v36, v34, 1                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=34, coord0Vgpr=34 (multiple bpe)
-buffer_load_d16_b16 v51, v39, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
+v_add_lshl_u32 v31, v28, v26, 1                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=26, coord0Vgpr=26 (multiple bpe)
+buffer_load_d16_b16 v43, v31, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
 /* (d1,vc1,d0,vc0)=(0,0,1,0) */
-buffer_load_d16_b16 v52, v39, s[sgprSrdC:sgprSrdC+3], 0 offen offset:32 // load C
+buffer_load_d16_b16 v44, v31, s[sgprSrdC:sgprSrdC+3], 0 offen offset:32 // load C
 /* (d1,vc1,d0,vc0)=(4,0,0,0) */
 s_mul_i32 s8, s[sgprStrideC1J], 16                 // scale StrideC *= numRows(8) * bpe
 s_add_u32 s[sgprSrdC+0], s[sgprSrdC+0], s8         // incToNextRow(8): gra SRD += inc(lower)
 s_addc_u32 s[sgprSrdC+1], s[sgprSrdC+1], 0         // incToNextRow(8): gra SRD += inc(upper)
-buffer_load_d16_b16 v53, v39, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
+buffer_load_d16_b16 v45, v31, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
 /* (d1,vc1,d0,vc0)=(4,0,1,0) */
-buffer_load_d16_b16 v54, v39, s[sgprSrdC:sgprSrdC+3], 0 offen offset:32 // load C
-v_add_lshl_u32 v38, v37, v34, 1                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=34, coord0Vgpr=34 (multiple bpe)
+buffer_load_d16_b16 v46, v31, s[sgprSrdC:sgprSrdC+3], 0 offen offset:32 // load C
+v_add_lshl_u32 v30, v29, v26, 1                    // optSingleColVgpr scaleToBpe: sharedAddrVgpr <- cinRowPtr + coord0, scaled by BPE. BSHERE:coord0=26, coord0Vgpr=26 (multiple bpe)
 
 /* rC *= alpha batchElements=[(0, 0, 0, 0), (0, 1, 0, 0), (4, 0, 0, 0), (4, 1, 0, 0)] */
 v_mul_f32 v[vgprValuC+0], s[sgprAlpha], v[vgprValuC+0] // *= alpha (pk)
@@ -2820,59 +2985,59 @@ v_mul_f32 v[vgprValuC+2], s[sgprAlpha], v[vgprValuC+2] // *= alpha (pk)
 v_mul_f32 v[vgprValuC+2+1], s[sgprAlpha], v[vgprValuC+2+1] // *= alpha (pk)
 
 /* apply mask, calc new C and issue writes */
-v_mov_b32 v48, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
-v_mov_b32 v49, 0x7fff0000                          // fp32 Nan
-v_mov_b32 v50, 0x7fff                              // rounding bias for bfloat16
+v_mov_b32 v40, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
+v_mov_b32 v41, 0x7fff0000                          // fp32 Nan
+v_mov_b32 v42, 0x7fff                              // rounding bias for bfloat16
 
 s_waitcnt vmcnt(3)                                 // vlcnt(3) = 4 - 1 (beta) (interleaved)
-v_lshlrev_b32 v44, 16, v51                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+0], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_lshlrev_b32 v36, 16, v43                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+0], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s8, v[vgprValuC+0], v[vgprValuC+0]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+0], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+0], v47, v49, s8
-v_lshrrev_b32 v40, 16, v[vgprValuC+0]              // convert C to bf16
-buffer_store_b16 v40, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+0], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+0], v39, v41, s8
+v_lshrrev_b32 v32, 16, v[vgprValuC+0]              // convert C to bf16
+buffer_store_b16 v32, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 
 s_waitcnt vmcnt(2)                                 // vlcnt(2) = 4 - 2 (beta) (interleaved)
-v_lshlrev_b32 v44, 16, v52                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+1], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_lshlrev_b32 v36, 16, v44                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+1], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s8, v[vgprValuC+1], v[vgprValuC+1]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+1], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+1], v47, v49, s8
-v_lshrrev_b32 v41, 16, v[vgprValuC+1]              // convert C to bf16
-buffer_store_b16 v41, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
+v_bfe_u32 v39, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+1], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+1], v39, v41, s8
+v_lshrrev_b32 v33, 16, v[vgprValuC+1]              // convert C to bf16
+buffer_store_b16 v33, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
 
 s_waitcnt vmcnt(1)                                 // vlcnt(1) = 4 - 3 (beta) (interleaved)
-v_lshlrev_b32 v44, 16, v53                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+2], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_lshlrev_b32 v36, 16, v45                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+2], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s8, v[vgprValuC+2], v[vgprValuC+2]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+2], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+2], v47, v49, s8
-v_lshrrev_b32 v42, 16, v[vgprValuC+2]              // convert C to bf16
+v_bfe_u32 v39, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+2], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+2], v39, v41, s8
+v_lshrrev_b32 v34, 16, v[vgprValuC+2]              // convert C to bf16
 s_mul_i32 s8, s[sgprStrideD1J], 16                 // scale StrideD *= numRows(8) * bpe
 s_add_u32 s[sgprSrdD+0], s[sgprSrdD+0], s8         // incToNextRow(8): gra SRD += inc(lower)
 s_addc_u32 s[sgprSrdD+1], s[sgprSrdD+1], 0         // incToNextRow(8): gra SRD += inc(upper)
-buffer_store_b16 v42, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+buffer_store_b16 v34, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 
 s_waitcnt vmcnt(0)                                 // vlcnt(0) = 4 - 4 (beta) (interleaved)
-v_lshlrev_b32 v44, 16, v54                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+3], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_lshlrev_b32 v36, 16, v46                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+3], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s8, v[vgprValuC+3], v[vgprValuC+3]     // check Nan
-v_bfe_u32 v47, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+3], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+3], v47, v49, s8
-v_lshrrev_b32 v43, 16, v[vgprValuC+3]              // convert C to bf16
-buffer_store_b16 v43, v38, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
+v_bfe_u32 v39, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+3], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+3], v39, v41, s8
+v_lshrrev_b32 v35, 16, v[vgprValuC+3]              // convert C to bf16
+buffer_store_b16 v35, v30, s[sgprSrdD:sgprSrdD+3], 0 offen offset:32 // store D
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_branch label_GW_End_1                            // jump to end
 label_GW_B1_FD0_VW1_GSU1_NonEdgeEnd_1:
 label_GW_B1_FD0_VW1_GSU1_Else_1:
 label_GW_B1_FD0_VW1_GSU1_Then_1:
 
-/* edge=1, allocate 3 sgpr. perBatchTmpS=2 perBatchMaskS=1 perElementMaskS=0 elementsPerBatch=14 */
+/* edge=1, allocate 3 sgpr. perBatchTmpS=2 perBatchMaskS=1 perElementMaskS=0 elementsPerBatch=22 */
 /* optSingleColVgpr=0 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Edge_Mask optSrdIncForRow=0 factorDim=0 */
 
 /******************************************/
@@ -2881,52 +3046,52 @@ label_GW_B1_FD0_VW1_GSU1_Then_1:
 /******************************************/
 
 /* calc coords, apply mask, and issue loads (if necessary) */
-v_mov_b32 v46, BufferOOB
+v_mov_b32 v38, BufferOOB
 /* (d1,vc1,d0,vc0)=(0,0,0,0) */
-v_cmp_lt_u32 s68, v34, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_cmp_lt_u32 s68, v26, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v39, v36, v34, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v39, v46, v39, s70                   // LDC clip if OOB. offset
-buffer_load_d16_b16 v38, v39, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
-v_add_lshl_u32 v39, v37, v34, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v39, v46, v39, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v31, v28, v26, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v31, v38, v31, s70                   // LDC clip if OOB. offset
+buffer_load_d16_b16 v30, v31, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
+v_add_lshl_u32 v31, v29, v26, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v31, v38, v31, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(0,0,1,0) */
-v_add_co_u32 v44, vcc_lo, v34, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
-v_cmp_lt_u32 s68, v44, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_co_u32 v36, vcc_lo, v26, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
+v_cmp_lt_u32 s68, v36, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v52, v36, v44, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v52, v46, v52, s70                   // LDC clip if OOB. offset
-buffer_load_d16_b16 v51, v52, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
-v_add_lshl_u32 v52, v37, v44, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v52, v46, v52, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v44, v28, v36, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v44, v38, v44, s70                   // LDC clip if OOB. offset
+buffer_load_d16_b16 v43, v44, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
+v_add_lshl_u32 v44, v29, v36, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v44, v38, v44, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(4,0,0,0) */
-v_add_co_u32 v35, vcc_lo, v35, 8                   // coord1.1: coord1Vgpr += d1*sg1*VW + vc1
+v_add_co_u32 v27, vcc_lo, v27, 8                   // coord1.1: coord1Vgpr += d1*sg1*VW + vc1
 
 /* Fix for UseInitialStridesCD, emitAddressSetupCode */
 s_mul_i32 s68, s[sgprStrideC1J], 8                 // scale stride
-v_add_nc_i32 v36, v36, s68                         // ROWINC- Move cinRowPtr to next row
+v_add_nc_i32 v28, v28, s68                         // ROWINC- Move cinRowPtr to next row
 s_mul_i32 s68, s[sgprStrideD1J], 8                 // scale stride
-v_add_nc_i32 v37, v37, s68                         // Move coutRowPtrD to next row
-v_cmp_lt_u32 s68, v34, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_nc_i32 v29, v29, s68                         // Move coutRowPtrD to next row
+v_cmp_lt_u32 s68, v26, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v54, v36, v34, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v54, v46, v54, s70                   // LDC clip if OOB. offset
-buffer_load_d16_b16 v53, v54, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
-v_add_lshl_u32 v54, v37, v34, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v54, v46, v54, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v46, v28, v26, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v46, v38, v46, s70                   // LDC clip if OOB. offset
+buffer_load_d16_b16 v45, v46, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
+v_add_lshl_u32 v46, v29, v26, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v46, v38, v46, s70                   // LDD clip if OOB. offset
 /* (d1,vc1,d0,vc0)=(4,0,1,0) */
-v_add_co_u32 v44, vcc_lo, v34, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
-v_cmp_lt_u32 s68, v44, s[sgprSizeI]                // coord0 < size0
-v_cmp_lt_u32 s70, v35, s[sgprSizeJ]                // coord1 < size1
+v_add_co_u32 v36, vcc_lo, v26, 16                  // coord0.1: coord0 += d0*sg0*VW + vc0
+v_cmp_lt_u32 s68, v36, s[sgprSizeI]                // coord0 < size0
+v_cmp_lt_u32 s70, v27, s[sgprSizeJ]                // coord1 < size1
 s_and_b32 s70, s68, s70                            // in0 && in1
-v_add_lshl_u32 v56, v36, v44, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v56, v46, v56, s70                   // LDC clip if OOB. offset
-buffer_load_d16_b16 v55, v56, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
-v_add_lshl_u32 v56, v37, v44, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
-v_cndmask_b32 v56, v46, v56, s70                   // LDD clip if OOB. offset
+v_add_lshl_u32 v48, v28, v36, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v48, v38, v48, s70                   // LDC clip if OOB. offset
+buffer_load_d16_b16 v47, v48, s[sgprSrdC:sgprSrdC+3], 0 offen offset:0 // load C
+v_add_lshl_u32 v48, v29, v36, 1                    // scaleToBpe: accumulate d0 lower and *= bpe into Cin addr (multiple bpe)
+v_cndmask_b32 v48, v38, v48, s70                   // LDD clip if OOB. offset
 
 /* rC *= alpha batchElements=[(0, 0, 0, 0), (0, 1, 0, 0), (4, 0, 0, 0), (4, 1, 0, 0)] */
 v_mul_f32 v[vgprValuC+0], s[sgprAlpha], v[vgprValuC+0] // *= alpha (pk)
@@ -2936,41 +3101,41 @@ v_mul_f32 v[vgprValuC+2+1], s[sgprAlpha], v[vgprValuC+2+1] // *= alpha (pk)
 s_waitcnt vmcnt(0)                                 // wait for Beta
 
 /* apply mask, calc new C and issue writes */
-v_mov_b32 v48, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
-v_mov_b32 v49, 0x7fff0000                          // fp32 Nan
-v_mov_b32 v50, 0x7fff                              // rounding bias for bfloat16
-v_lshlrev_b32 v44, 16, v38                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+0], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_mov_b32 v40, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
+v_mov_b32 v41, 0x7fff0000                          // fp32 Nan
+v_mov_b32 v42, 0x7fff                              // rounding bias for bfloat16
+v_lshlrev_b32 v36, 16, v30                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+0], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s68, v[vgprValuC+0], v[vgprValuC+0]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+0], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+0], v47, v49, s68
-v_lshrrev_b32 v40, 16, v[vgprValuC+0]              // convert C to bf16
-buffer_store_b16 v40, v39, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-v_lshlrev_b32 v44, 16, v51                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+1], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_bfe_u32 v39, v[vgprValuC+0], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+0], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+0], v39, v41, s68
+v_lshrrev_b32 v32, 16, v[vgprValuC+0]              // convert C to bf16
+buffer_store_b16 v32, v31, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_lshlrev_b32 v36, 16, v43                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+1], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s68, v[vgprValuC+1], v[vgprValuC+1]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+1], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+1], v47, v49, s68
-v_lshrrev_b32 v41, 16, v[vgprValuC+1]              // convert C to bf16
-buffer_store_b16 v41, v52, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-v_lshlrev_b32 v44, 16, v53                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+2], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_bfe_u32 v39, v[vgprValuC+1], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+1], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+1], v39, v41, s68
+v_lshrrev_b32 v33, 16, v[vgprValuC+1]              // convert C to bf16
+buffer_store_b16 v33, v44, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_lshlrev_b32 v36, 16, v45                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+2], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s68, v[vgprValuC+2], v[vgprValuC+2]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+2], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+2], v47, v49, s68
-v_lshrrev_b32 v42, 16, v[vgprValuC+2]              // convert C to bf16
-buffer_store_b16 v42, v54, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
-v_lshlrev_b32 v44, 16, v55                         // cvt bf16 to fp32. 
-v_fmac_f32 v[vgprValuC+3], v44, s[sgprBeta]        // finalSum = sum*alpha + C*beta
+v_bfe_u32 v39, v[vgprValuC+2], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+2], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+2], v39, v41, s68
+v_lshrrev_b32 v34, 16, v[vgprValuC+2]              // convert C to bf16
+buffer_store_b16 v34, v46, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_lshlrev_b32 v36, 16, v47                         // cvt bf16 to fp32. 
+v_fmac_f32 v[vgprValuC+3], v36, s[sgprBeta]        // finalSum = sum*alpha + C*beta
 v_cmp_u_f32 s68, v[vgprValuC+3], v[vgprValuC+3]    // check Nan
-v_bfe_u32 v47, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
-v_add3_u32 v47, v[vgprValuC+3], v47, v50           // Non-Nan case: add lsb and the increment for rounding
-v_cndmask_b32 v[vgprValuC+3], v47, v49, s68
-v_lshrrev_b32 v43, 16, v[vgprValuC+3]              // convert C to bf16
-buffer_store_b16 v43, v56, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
+v_bfe_u32 v39, v[vgprValuC+3], 16, 1               // Non-Nan case: store lsb of bf16
+v_add3_u32 v39, v[vgprValuC+3], v39, v42           // Non-Nan case: add lsb and the increment for rounding
+v_cndmask_b32 v[vgprValuC+3], v39, v41, s68
+v_lshrrev_b32 v35, 16, v[vgprValuC+3]              // convert C to bf16
+buffer_store_b16 v35, v48, s[sgprSrdD:sgprSrdD+3], 0 offen offset:0 // store D
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_branch label_GW_End_1                            // jump to end
 label_SK_Partials_1:
@@ -2984,7 +3149,7 @@ s_mul_hi_u32 s9, 0x800, s[sgprPersistentWorkGroupIndex] // partials tile offset 
 s_add_u32 s[sgprSrdWS+0], s[sgprSrdWS+0], s8       // add lo to SRD
 s_addc_u32 s[sgprSrdWS+1], s[sgprSrdWS+1], s9      // add hi (offset high word + lo carry) to SRD
 
-/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=44 */
+/* edge=0, allocate 1 sgpr. perBatchTmpS=1 perBatchMaskS=0 perElementMaskS=0 elementsPerBatch=66 */
 /* optSingleColVgpr=1 optSharedColVgpr=0 optSGPRUsage=BufferLoad_Mask optSrdIncForRow=1 */
 
 /******************************************/
@@ -2995,18 +3160,18 @@ s_addc_u32 s[sgprSrdWS+1], s[sgprSrdWS+1], s9      // add hi (offset high word +
 /* calc coords, apply mask, and issue loads (if necessary) */
 
 /* apply mask, calc new C and issue writes */
-v_mov_b32 v48, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
-v_mov_b32 v49, 0x7fff0000                          // fp32 Nan
-v_mov_b32 v50, 0x7fff                              // rounding bias for bfloat16
-v_lshlrev_b32 v38, 2, v[vgprSerial]                // v38 = v[vgprSerial] * 4
+v_mov_b32 v40, 0xffff0000                          // mask for pack two bfloat16 element to 32bit
+v_mov_b32 v41, 0x7fff0000                          // fp32 Nan
+v_mov_b32 v42, 0x7fff                              // rounding bias for bfloat16
+v_lshlrev_b32 v30, 2, v[vgprSerial]                // v30 = v[vgprSerial] * 4
 s_mov_b32 s8, 0                                    // Init sgpr offset
-buffer_store_b32 v40, v38, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
+buffer_store_b32 v32, v30, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
 s_add_u32 s8, s8, 512                              // Inc sgpr offset
-buffer_store_b32 v41, v38, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
+buffer_store_b32 v33, v30, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
 s_add_u32 s8, s8, 512                              // Inc sgpr offset
-buffer_store_b32 v42, v38, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
+buffer_store_b32 v34, v30, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
 s_add_u32 s8, s8, 512                              // Inc sgpr offset
-buffer_store_b32 v43, v38, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
+buffer_store_b32 v35, v30, s[sgprSrdWS:sgprSrdWS+3], s8 offen offset:0 glc slc dlc // addStore
 s_nop 0                                            // 1 wait state required when next inst writes vgprs held by previous dwordx4 store inst
 s_waitcnt_vscnt null 0                             // wait for data store
 s_barrier                                          // store all data before setting flag
@@ -3015,12 +3180,12 @@ v_readfirstlane_b32 s9, v[vgprSerial]              // Wave 0 updates flags
 s_cmp_eq_u32 s9, 0                                 // Check for wave 0
 s_cbranch_scc0 label_SK_SkipFlagSet                // Skip flag set
 s_mov_b32 s9, 1                                    // flag data
-v_mov_b32 v51, s9                                  // move flag value to vgpr
-v_mov_b32 v52, 0                                   // zero vaddr offset
+v_mov_b32 v43, s9                                  // move flag value to vgpr
+v_mov_b32 v44, 0                                   // zero vaddr offset
 s_mov_b64 s[68:69], s[sgprAddressFlags:sgprAddressFlags+1]
 s_mov_b32 s70, BufferOOB
 s_mov_b32 s71, Srd127_96
-buffer_store_b32 v51, v52, s[68:71], s8 offen offset:0 glc dlc // set flag
+buffer_store_b32 v43, v44, s[68:71], s8 offen offset:0 glc dlc // set flag
 s_waitcnt_vscnt null 0                             // wait for data store
 label_SK_SkipFlagSet:
 s_waitcnt lgkmcnt(0)                               // wait for flag
