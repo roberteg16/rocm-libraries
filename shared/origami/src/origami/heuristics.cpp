@@ -143,6 +143,36 @@ void register_cms_kernels(origami::heuristics_database_t& db) {
   }
 }
 
+// gfx1150 W4A16 (int4 A, bf16 MI) tile latency weights, fit with w4a16_gfx1150(); others weigh 1.
+struct w4a16_tile_weight_t {
+  size_t m, n, k;
+  double weight;
+};
+
+constexpr std::array<w4a16_tile_weight_t, 6> gfx1150_w4a16_bf16_tile_weights{{
+    {32, 16, 128, 1.5},
+    {64, 32, 128, 1.05},
+    {64, 96, 128, 1.05},
+    {96, 256, 64, 1.05},
+    {128, 128, 64, 0.95},
+    {256, 160, 64, 0.95},
+}};
+
+void register_w4a16_tile_weights(origami::heuristics_database_t& db) {
+  for (const auto& t : gfx1150_w4a16_bf16_tile_weights) {
+    origami::heuristic_key_t key;
+    key.arch     = origami::hardware_t::architecture_t::gfx1150;
+    key.a_dtype  = origami::data_type_t::Int4;
+    key.mi_dtype = origami::data_type_t::BFloat16;
+    key.mt_m     = t.m;
+    key.mt_n     = t.n;
+    key.mt_k     = t.k;
+    origami::heuristic_params_t params;
+    params.weight_tile_total = t.weight;
+    db.add_entry(key, params);
+  }
+}
+
 }  // namespace
 
 namespace origami {
@@ -384,6 +414,7 @@ bool heuristics_database_t::has_hand_optimized_entry(hardware_t::architecture_t 
 void heuristics_database_t::initialize_defaults() {
   // CMS kernel efficiencies
   register_cms_kernels(*this);
+  register_w4a16_tile_weights(*this);
 }
 
 // ============================================================================

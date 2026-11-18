@@ -220,7 +220,19 @@ TEST_CASE("GEMM: W4A16 tiles pay the in-kernel dequantize", "[gemm][w4a16]") {
   // twice the VALU of the fp16 one (packed halves).
   const auto gfx1151 = make_w4a16_gfx1151_hardware();
   REQUIRE(tile(gfx1151, origami::data_type_t::BFloat16) > tile(gfx1151, origami::data_type_t::Half));
-  // The W4A16 model is gfx1151's only: other architectures are left as they were.
+  // gfx1150 has its own W4A16 constants, for bf16 only: its 128x96x128 tiles pay the bf16
+  // dequantize; fp16 keeps the generic model.
+  // gfx1150 (Strix Point) as Origami derives it from the device: 16 CUs, 2 MB L2, 2.9 GHz.
+  const auto gfx1150 = origami::hardware_t::get_hardware_for_arch(
+      origami::hardware_t::architecture_t::gfx1150, 16, 65536, 262144, 2097152, 2900000);
+  auto small = [&](origami::data_type_t mi_dtype) {
+    auto problem    = make_problem(4096, 96, 2048);
+    problem.a_dtype = origami::data_type_t::Int4;
+    problem.b_dtype = problem.c_dtype = problem.d_dtype = problem.mi_dtype = mi_dtype;
+    auto c          = make_config(128, 96, 128, 16, 16, 16, false, 1, 1, 0, 0, 0);
+    return origami::gemm::compute_total_latency(problem, gfx1150, c);
+  };
+  REQUIRE(small(origami::data_type_t::BFloat16) > small(origami::data_type_t::Half));
   const auto gfx950 = make_hardware(950);
   REQUIRE(tile(gfx950, origami::data_type_t::BFloat16) == tile(gfx950, origami::data_type_t::Half));
 }
@@ -3135,4 +3147,25 @@ TEST_CASE("GEMM: gfx1250 ranking prices the WGM the host launches", "[gemm][gfx1
     }
   }
   REQUIRE(discriminates);
+}
+
+TEST_CASE("GEMM: W4A16 bf16 tile weights on gfx1150", "[gemm][w4a16]") {
+  auto lookup = [](origami::hardware_t::architecture_t arch, origami::data_type_t mi_dtype,
+                   size_t mt_m, size_t mt_n, size_t mt_k) {
+    auto hardware   = make_w4a16_gfx1151_hardware();
+    hardware.arch   = arch;
+    auto problem    = make_problem(4096, 512, 4096);
+    problem.a_dtype = origami::data_type_t::Int4;
+    problem.b_dtype = problem.c_dtype = problem.d_dtype = problem.mi_dtype = mi_dtype;
+    auto config     = make_config(mt_m, mt_n, mt_k, 16, 16, 16, false, 1, 1, 0, 0, 3);
+    return origami::heuristics_database_t::get_instance().lookup(problem, hardware, config).weight_tile_total;
+  };
+  const auto gfx1150 = origami::hardware_t::architecture_t::gfx1150;
+  const auto bf16    = origami::data_type_t::BFloat16;
+  // MT32x16x128 runs slower than the model says on gfx1150 ...
+  REQUIRE(lookup(gfx1150, bf16, 32, 16, 128) == Approx(1.5));
+  // ... but not on gfx1151, for fp16, or for a tile without an entry.
+  REQUIRE(lookup(origami::hardware_t::architecture_t::gfx1151, bf16, 32, 16, 128) == Approx(1.0));
+  REQUIRE(lookup(gfx1150, origami::data_type_t::Half, 32, 16, 128) == Approx(1.0));
+  REQUIRE(lookup(gfx1150, bf16, 64, 128, 64) == Approx(1.0));
 }
