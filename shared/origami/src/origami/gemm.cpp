@@ -1191,8 +1191,7 @@ static double compute_w4a16_dequant_latency(const problem_t& problem,
 static bool is_w4a16_decode(const problem_t& problem,
                             const hardware_t& hardware,
                             const config_t& config) {
-  const w4a16_params_t* p = w4a16_params(problem, hardware);
-  return p != nullptr && p->decode_dram_bytes_per_us > 0.0 && config.mi.m == 1 && config.mi.n == 1 && config.mi.k == 64;
+  return w4a16_params(problem, hardware) != nullptr && config.mi.m == 1 && config.mi.n == 1 && config.mi.k == 64;
 }
 
 // Latency of a W4A16 decode kernel, in the cycles of compute_total_latency (2200 per us,
